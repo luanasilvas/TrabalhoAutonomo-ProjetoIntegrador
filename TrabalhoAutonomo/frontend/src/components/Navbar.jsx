@@ -1,9 +1,9 @@
-// src/components/Navbar.jsx
 import React from 'react';
-import { AppBar, Toolbar, Typography, IconButton, InputBase } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, InputBase, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -35,7 +35,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from `theme.typography.fontSize`
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -70,6 +69,8 @@ function Navbar({ onSidebarOpen }) {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
+        <Button color="inherit" component={Link} to="/signup">Entrar</Button>
+        <Button color="inherit" component={Link} to="/cadastro-usuario">Cadastrar</Button>
       </Toolbar>
     </AppBar>
   );

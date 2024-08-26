@@ -1,59 +1,67 @@
-// src/components/Sidebar.jsx
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, IconButton } from '@mui/material';
-import { Link } from 'react-router-dom'; // Adicione esta linha
-import HomeIcon from '@mui/icons-material/Home';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import LoginIcon from '@mui/icons-material/Login';
-import SearchIcon from '@mui/icons-material/Search';
-import DescriptionIcon from '@mui/icons-material/Description';
-import PersonIcon from '@mui/icons-material/Person';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Avatar, Divider, IconButton } from '@mui/material';
+import { Home, AccountCircle, Settings, ExitToApp, Close } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
-const Sidebar = ({ open, onClose }) => {
+function Sidebar({ open, onClose }) {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    // Você pode condicionalmente redirecionar com base no perfil do usuário ou outras regras
+    navigate('/perfil-cliente');
+    // Ou apenas uma das rotas
+    // navigate('/perfil-trabalhador');
+  };
+
+  const handleLogout = () => {
+    // Adicione aqui a lógica de logout
+    navigate('/login');
+  };
+
   return (
     <Drawer
+      variant="persistent"
       anchor="left"
       open={open}
       onClose={onClose}
-      sx={{
-        '& .MuiDrawer-paper': {
-          width: 240,
-          boxSizing: 'border-box',
-        },
-      }}
     >
-      <List>
-        <ListItem button component={Link} to="/" onClick={onClose}>
-          <ListItemIcon><HomeIcon /></ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem button component={Link} to="/anuncios" onClick={onClose}>
-          <ListItemIcon><DescriptionIcon /></ListItemIcon>
-          <ListItemText primary="Anúncios" />
-        </ListItem>
-        <ListItem button component={Link} to="/perfil-cliente" onClick={onClose}>
-          <ListItemIcon><PersonIcon /></ListItemIcon>
-          <ListItemText primary="Perfil Cliente" />
-        </ListItem>
-        <ListItem button component={Link} to="/perfil-trabalhador" onClick={onClose}>
-          <ListItemIcon><PersonIcon /></ListItemIcon>
-          <ListItemText primary="Perfil Trabalhador" />
-        </ListItem>
-        <ListItem button component={Link} to="/avaliacao-feedback" onClick={onClose}>
-          <ListItemIcon><RateReviewIcon /></ListItemIcon>
-          <ListItemText primary="Avaliação" />
-        </ListItem>
-        <ListItem button component={Link} to="/enviar-proposta" onClick={onClose}>
-          <ListItemIcon><MailOutlineIcon /></ListItemIcon>
-          <ListItemText primary="Enviar Proposta" />
-        </ListItem>
-      </List>
-      <Divider />
+      <div style={{ width: 240 }}>
+        <div style={{ padding: '16px', display: 'flex', alignItems: 'center', flexDirection: 'column', position: 'relative' }}>
+          <IconButton
+            onClick={onClose}
+            style={{ position: 'absolute', top: 16, right: 16 }}
+          >
+            <Close />
+          </IconButton>
+          <Avatar
+            src="link_para_imagem_de_perfil.jpg" // Substitua com a URL ou caminho da imagem do perfil do usuário
+            style={{ width: 80, height: 80, marginBottom: 16 }}
+            onClick={handleProfileClick}
+          />
+          <h4>Nome do Usuário</h4> {/* Substitua com o nome do usuário */}
+        </div>
+        <Divider />
+        <List>
+          <ListItem button onClick={() => navigate('/home')}>
+            <ListItemIcon><Home /></ListItemIcon>
+            <ListItemText primary="Início" />
+          </ListItem>
+          <ListItem button onClick={handleProfileClick}>
+            <ListItemIcon><AccountCircle /></ListItemIcon>
+            <ListItemText primary="Perfil" />
+          </ListItem>
+          <ListItem button onClick={() => navigate('/settings')}>
+            <ListItemIcon><Settings /></ListItemIcon>
+            <ListItemText primary="Configurações" />
+          </ListItem>
+          <ListItem button onClick={handleLogout}>
+            <ListItemIcon><ExitToApp /></ListItemIcon>
+            <ListItemText primary="Sair" />
+          </ListItem>
+        </List>
+      </div>
     </Drawer>
   );
-};
+}
 
 export default Sidebar;
