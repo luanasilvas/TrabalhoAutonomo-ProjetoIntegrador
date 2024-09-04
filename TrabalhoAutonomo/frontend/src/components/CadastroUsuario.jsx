@@ -1,7 +1,7 @@
-// src/components/CadastroUsuario.jsx
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function CadastroUsuario() {
   const [nome, setNome] = useState('');
@@ -11,13 +11,22 @@ function CadastroUsuario() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [mensagem, setMensagem] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (senha !== confirmarSenha) {
       setMensagem('As senhas não coincidem!');
     } else {
-      setMensagem('Usuário cadastrado com sucesso!');
-      // Aqui você pode adicionar a lógica para enviar os dados para o backend
+      try {
+        const response = await axios.post('http://localhost:3000/cadastro-usuario', {
+          nome,
+          email,
+          username,
+          senha
+        });
+        setMensagem('Usuário cadastrado com sucesso!');
+      } catch (error) {
+        setMensagem('Erro ao cadastrar usuário');
+      }
     }
   };
 
@@ -90,19 +99,10 @@ function CadastroUsuario() {
             {mensagem}
           </Typography>
         )}
-        <Box sx={{ mt: 4, textAlign: 'center' }}>
-          <Typography variant="body1">
-            Deseja se cadastrar como profissional autônomo?
+        <Box sx={{ textAlign: 'center', mt: 2 }}>
+          <Typography>
+            Já tem uma conta? <Link to="/login">Entrar</Link>
           </Typography>
-          <Button
-            component={Link}
-            to="/registrar-profissional"
-            variant="outlined"
-            color="primary"
-            sx={{ mt: 2 }}
-          >
-            Perfil Profissional
-          </Button>
         </Box>
       </Box>
     </Container>

@@ -8,7 +8,6 @@ function EnviarProposta() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Adicione a lógica para enviar a proposta
   };
 
   return (

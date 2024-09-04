@@ -8,7 +8,6 @@ function Dashboard() {
         <Typography variant="h4" component="h1" gutterBottom>
           Dashboard
         </Typography>
-        {/* Adicione as seções do painel de controle aqui */}
       </Box>
     </Container>
   );

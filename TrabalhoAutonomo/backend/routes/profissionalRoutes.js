@@ -1,8 +1,8 @@
 const express = require('express');
-const { criarTrabalhador, obterTrabalhadorPorId } = require('../controllers/profissionalController');
 const router = express.Router();
+const profissionalController = require('../controllers/profissionalController');
 
-router.post('/', criarTrabalhador);
-router.get('/:id', obterTrabalhadorPorId);
+router.post('/', profissionalController.criarTrabalhador);
+router.get('/:id', profissionalController.obterTrabalhadorPorId);
 
 module.exports = router;

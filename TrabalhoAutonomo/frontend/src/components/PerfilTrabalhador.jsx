@@ -27,33 +27,27 @@ function PerfilTrabalhador() {
   };
 
   const handleEditProfile = () => {
-    // Lógica para edição do perfil
     console.log('Editar Perfil');
   };
 
   const handleDeleteProfile = () => {
-    // Lógica para exclusão do perfil
     console.log('Excluir Perfil');
   };
 
   const handleAddPortfolio = () => {
-    // Lógica para adicionar novo projeto ao portfólio
     console.log('Adicionar Projeto ao Portfólio');
   };
 
   const handleEditPortfolio = (index) => {
-    // Lógica para editar projeto do portfólio
     console.log('Editar Projeto', index);
   };
 
   const handleDeletePortfolio = (index) => {
-    // Lógica para excluir projeto do portfólio
     console.log('Excluir Projeto', index);
   };
 
   return (
     <Container maxWidth="md" style={{ padding: 20 }}>
-      {/* Seção de perfil do trabalhador */}
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
         <Avatar
           src={worker.profilePicture}
@@ -68,7 +62,6 @@ function PerfilTrabalhador() {
           <Typography variant="body2" color="text.secondary">Contato: {worker.contact}</Typography>
           <Typography variant="body2" color="text.secondary">Habilidades: {worker.skills.join(', ')}</Typography>
 
-          {/* Botões de ação para perfil */}
           <Box sx={{ mt: 2 }}>
             <Button variant="contained" color="primary" onClick={handleEditProfile} sx={{ mr: 2 }}>
               Editar Perfil
@@ -82,7 +75,6 @@ function PerfilTrabalhador() {
 
       <Divider sx={{ mb: 4 }} />
 
-      {/* Seção de Portfólio */}
       <Typography variant="h6" gutterBottom>
         Portfólio
       </Typography>
@@ -117,7 +109,6 @@ function PerfilTrabalhador() {
         ))}
       </Grid>
 
-      {/* Botão de adicionar novo projeto */}
       <Box sx={{ mt: 4 }}>
         <Button variant="contained" color="success" onClick={handleAddPortfolio}>
           Adicionar Projeto
@@ -126,7 +117,6 @@ function PerfilTrabalhador() {
 
       <Divider sx={{ my: 4 }} />
 
-      {/* Seção de Avaliações */}
       <Typography variant="h6" gutterBottom>
         Avaliações
       </Typography>
@@ -154,7 +144,6 @@ function PerfilTrabalhador() {
 
       <Divider sx={{ my: 4 }} />
 
-      {/* Seção de Histórico de Contratação */}
       <Typography variant="h6" gutterBottom>
         Histórico de Contratação
       </Typography>

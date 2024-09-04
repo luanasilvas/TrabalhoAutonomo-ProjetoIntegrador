@@ -7,14 +7,11 @@ function Sidebar({ open, onClose }) {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    // Você pode condicionalmente redirecionar com base no perfil do usuário ou outras regras
-    navigate('/perfil-cliente');
-    // Ou apenas uma das rotas
-    // navigate('/perfil-trabalhador');
+    //navigate('/perfil-cliente');
+     navigate('/perfil-trabalhador');
   };
 
   const handleLogout = () => {
-    // Adicione aqui a lógica de logout
     navigate('/login');
   };
 
@@ -34,11 +31,11 @@ function Sidebar({ open, onClose }) {
             <Close />
           </IconButton>
           <Avatar
-            src="link_para_imagem_de_perfil.jpg" // Substitua com a URL ou caminho da imagem do perfil do usuário
+            src="link_para_imagem_de_perfil.jpg"
             style={{ width: 80, height: 80, marginBottom: 16 }}
             onClick={handleProfileClick}
           />
-          <h4>Nome do Usuário</h4> {/* Substitua com o nome do usuário */}
+          <h4>Nome do Usuário</h4> 
         </div>
         <Divider />
         <List>

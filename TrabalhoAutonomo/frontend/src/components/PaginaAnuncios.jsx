@@ -8,7 +8,6 @@ function PaginaAnuncios() {
   return (
     <div>
       <h1>Anúncios para {subcategoria}</h1>
-      {/* Lógica para exibir os anúncios aqui */}
     </div>
   );
 }

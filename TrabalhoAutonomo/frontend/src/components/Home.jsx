@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Carousel from 'react-material-ui-carousel';
-import img1 from '../assets/img/anton-SnKfmC1I9fU-unsplash.jpg'; // Importação de imagens para o carrossel
+import img1 from '../assets/img/anton-SnKfmC1I9fU-unsplash.jpg';
 import img2 from '../assets/img/bermix-studio-nZZfP9QiQ6w-unsplash.jpg';
 import img3 from '../assets/img/jeswin-thomas-dfRrpfYD8Iw-unsplash.jpg';
 import img4 from '../assets/img/kal-visuals-zE3jMxLFCIg-unsplash.jpg';
@@ -14,33 +14,25 @@ import img7 from '../assets/img/robinson-greig-HrnAxAUwle8-unsplash.jpg';
 import img8 from '../assets/img/samsung-memory-seUxMX-DhAQ-unsplash.jpg';
 
 function Home() {
-  // Estado para controlar se a barra lateral está aberta ou fechada
+  // Estado da barra lateral
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Estado para controlar o elemento de ancoragem do menu de subcategorias
+  // Estado menu de subcategoria
   const [anchorEl, setAnchorEl] = useState(null);
-
-  // Estado para armazenar as subcategorias disponíveis para a categoria selecionada
   const [subcategorias, setSubcategorias] = useState([]);
-
-  // Hook para navegação programática entre páginas
   const navigate = useNavigate();
 
-  // Função para abrir a barra lateral
+  // Barra lateral
   const handleDrawerOpen = () => {
     setSidebarOpen(true);
   };
-
-  // Função para fechar a barra lateral
   const handleDrawerClose = () => {
     setSidebarOpen(false);
   };
-
-  // Função que é chamada ao clicar em uma categoria; define o menu de subcategorias
   const handleCategoriaClick = (event, categoria) => {
-    setAnchorEl(event.currentTarget); // Define o elemento que ancorará o menu de subcategorias
+    setAnchorEl(event.currentTarget); 
 
-    // Define as subcategorias com base na categoria clicada
+    // Subcategorias 
     switch (categoria) {
       case 'Assistência Técnica':
         setSubcategorias(['Eletrônicos', 'Eletrodomésticos', 'Computadores']);
@@ -75,25 +67,22 @@ function Home() {
     }
   };
 
-  // Função que navega para a página de anúncios com a subcategoria selecionada
   const handleSubcategoriaClick = (subcategoria) => {
     navigate('/anuncios', { state: { subcategoria } });
     handleMenuClose();
   };
-
-  // Função para fechar o menu de subcategorias
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  // Definição das categorias disponíveis na plataforma
+  // Categorias
   const categorias = [
     'Assistência Técnica', 'Aulas', 'Design e Tecnologia', 
     'Eventos', 'Moda e Beleza', 'Reformas e Construção', 
     'Serviços Domésticos', 'Fretes e Mudanças', 'Pets'
   ];
 
-  // Definição dos serviços principais a serem exibidos no carrossel
+  // Carrossel
   const servicos = [
     {
       nome: 'Diarista',
@@ -150,6 +139,8 @@ function Home() {
     },
   ];
 
+//Style da paina
+  
   return (
     <div style={{ display: 'flex' }}>
       {/* Componente da barra lateral */}
@@ -164,7 +155,6 @@ function Home() {
         {/* Container principal da página */}
         <Container maxWidth="lg" style={{ padding: 20 }}>
           
-          {/* Bem-vindo à Plataforma */}
           <Box sx={{ mt: 4, mb: 4 }}>
             <Typography variant="h4" component="h1" gutterBottom>
               Bem-vindo à Plataforma de Trabalho Autônomo

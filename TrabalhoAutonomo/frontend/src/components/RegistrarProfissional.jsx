@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import axios from 'axios';
 
 function RegistrarProfissional() {
   const [nome, setNome] = useState('');
@@ -24,22 +25,42 @@ function RegistrarProfissional() {
   const subcategorias = {
     'Assistência Técnica': ['Eletrônicos', 'Eletrodomésticos', 'Computadores'],
     'Aulas': ['Música', 'Idiomas', 'Reforço Escolar'],
-    'Design e Tecnologia': ['Aparelhos Eletrônicos', 'Eletrodomésticos', 'Áudio e Vídeo', 'Web Design', 'Design Gráfico'],
-    'Eventos': ['Buffet', 'Decoração', 'Confeitaria', 'Carcés', 'DJs, Bandas e Cantores', 'Fotógrafo'],
-    'Moda e Beleza': ['Cabeleireiro(a)', 'Corte e Costura', 'Artesanato', 'Manicure', 'Estética', 'Maquiador(a)'],
-    'Reforma e Reparos': ['Pedreiro', 'Serralheiro', 'Serviços Gerais', 'Pintor'],
-    'Serviços Domésticos': ['Diarista', 'Babá', 'Cozinheira(o)', 'Lavadeira e Passadeira'],
-    'Mudança e Automotivos': ['Mudança', 'Transporte de Veículos'],
+    'Design e Tecnologia': ['Web Design', 'Design Gráfico', 'Programação'],
+    'Eventos': ['Buffet', 'Decoração', 'Fotógrafo'],
+    'Moda e Beleza': ['Cabeleireiro(a)', 'Manicure', 'Estética'],
+    'Reformas e Construção': ['Pedreiro', 'Pintor', 'Eletricista'],
+    'Serviços Domésticos': ['Diarista', 'Babá', 'Cozinheira(o)'],
+    'Fretes e Mudanças': ['Mudança', 'Fretes'],
     'Pets': ['Adestrador', 'Passeador', 'Banho e Tosa']
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (senha !== confirmarSenha) {
       setMensagem('As senhas não coincidem!');
     } else {
-      setMensagem('Profissional cadastrado com sucesso!');
-      // Aqui você pode adicionar a lógica para enviar os dados para o backend
+      try {
+        const formData = new FormData();
+        formData.append('nome', nome);
+        formData.append('email', email);
+        formData.append('username', username);
+        formData.append('senha', senha);
+        formData.append('idade', idade);
+        formData.append('localizacao', localizacao);
+        formData.append('descricao', descricao);
+        formData.append('foto', foto);
+        formData.append('categorias', categoriasSelecionadas.join(', '));
+        formData.append('subcategorias', subcategoriasSelecionadas.join(', '));
+  
+        const response = await axios.post('http://localhost:3000/cadastro-profissional', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        setMensagem(response.data.message || 'Cadastro realizado com sucesso!');
+      } catch (error) {
+        setMensagem('Erro ao cadastrar profissional');
+      }
     }
   };
 
@@ -140,46 +161,45 @@ function RegistrarProfissional() {
             onChange={(e) => setLocalizacao(e.target.value)}
           />
 
-<FormControl fullWidth margin="normal">
-  <InputLabel>Categoria</InputLabel>
-  <Select
-    multiple
-    value={categoriasSelecionadas}
-    onChange={handleCategoriaChange}
-    renderValue={(selected) => selected.join(', ')}
-    required
-  >
-    {categorias.map((categoria) => (
-      <MenuItem key={categoria} value={categoria}>
-        {categoria}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Categoria</InputLabel>
+            <Select
+              multiple
+              value={categoriasSelecionadas}
+              onChange={handleCategoriaChange}
+              renderValue={(selected) => selected.join(', ')}
+              required
+            >
+              {categorias.map((categoria) => (
+                <MenuItem key={categoria} value={categoria}>
+                  {categoria}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-<FormControl fullWidth margin="normal">
-  <InputLabel>Subcategoria</InputLabel>
-  <Select
-    multiple
-    value={subcategoriasSelecionadas}
-    onChange={handleSubcategoriaChange}
-    renderValue={(selected) => selected.join(', ')}
-    required
-  >
-    {categoriasSelecionadas.length > 0 &&
-      subcategorias[categoriasSelecionadas[0]] &&
-      subcategorias[categoriasSelecionadas[0]].map((subcategoria) => (
-        <MenuItem
-          key={subcategoria}
-          value={subcategoria}
-          // Adicione esta linha para evitar seleção automática
-          selected={subcategoriasSelecionadas.includes(subcategoria)}
-        >
-          {subcategoria}
-        </MenuItem>
-      ))}
-  </Select>
-</FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Subcategoria</InputLabel>
+            <Select
+              multiple
+              value={subcategoriasSelecionadas}
+              onChange={handleSubcategoriaChange}
+              renderValue={(selected) => selected.join(', ')}
+              required
+            >
+              {categoriasSelecionadas.length > 0 &&
+                subcategorias[categoriasSelecionadas[0]] &&
+                subcategorias[categoriasSelecionadas[0]].map((subcategoria) => (
+                  <MenuItem
+                    key={subcategoria}
+                    value={subcategoria}
+                    selected={subcategoriasSelecionadas.includes(subcategoria)}
+                  >
+                    {subcategoria}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
 
           <Button
             variant="contained"

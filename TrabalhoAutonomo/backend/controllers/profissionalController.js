@@ -1,5 +1,7 @@
-const Trabalhador = require('../models/profissionalModel');
-const Usuario = require('../models/usuarioModel');
+const bcrypt = require('bcrypt');
+const db = require('../models');
+const Usuario = db.Usuario;
+const Trabalhador = db.Trabalhador;
 
 const criarTrabalhador = async (req, res) => {
   const { nome, email, senha, descricao, habilidades, localizacao } = req.body;
@@ -25,7 +27,7 @@ const criarTrabalhador = async (req, res) => {
 
     res.status(201).json({ usuario: novoUsuario, trabalhador: novoTrabalhador });
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao criar trabalhador' });
+    res.status(500).json({ message: 'Erro ao criar trabalhador', error });
   }
 };
 
@@ -33,7 +35,10 @@ const obterTrabalhadorPorId = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const trabalhador = await Trabalhador.findOne({ where: { id_trabalhador: id }, include: Usuario });
+    const trabalhador = await Trabalhador.findOne({ 
+      where: { id_trabalhador: id }, 
+      include: Usuario 
+    });
 
     if (!trabalhador) {
       return res.status(404).json({ message: 'Trabalhador não encontrado' });
@@ -41,7 +46,7 @@ const obterTrabalhadorPorId = async (req, res) => {
 
     res.status(200).json(trabalhador);
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao obter trabalhador' });
+    res.status(500).json({ message: 'Erro ao obter trabalhador', error });
   }
 };
 
