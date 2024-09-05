@@ -6,13 +6,13 @@
     "start": "concurrently \"npm run start:front\" \"npm run start:back\"",
     "start:front": "cd frontend && npm run dev",
     "start:back": "cd backend && node app.js"
- 
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.16.0",
     "@mui/x-date-pickers": "^7.10.0",
+    "axios": "^0.27.2",
     "mdb-react-ui-kit": "^8.0.0",
     "react-axios": "^2.0.6",
     "react-google-charts": "^4.0.1"

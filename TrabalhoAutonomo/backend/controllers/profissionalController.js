@@ -9,7 +9,7 @@ const criarTrabalhador = async (req, res) => {
   try {
     const hashSenha = await bcrypt.hash(senha, 10);
 
-    // Cria o usuário e escolhe o tipo trabalhador
+    // Cria um usuário e escolhe o tipo trabalhador
     const novoUsuario = await Usuario.create({
       nome,
       email,
@@ -27,6 +27,7 @@ const criarTrabalhador = async (req, res) => {
 
     res.status(201).json({ usuario: novoUsuario, trabalhador: novoTrabalhador });
   } catch (error) {
+    console.error('Erro ao criar trabalhador:', error);
     res.status(500).json({ message: 'Erro ao criar trabalhador', error });
   }
 };
@@ -35,9 +36,9 @@ const obterTrabalhadorPorId = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const trabalhador = await Trabalhador.findOne({ 
-      where: { id_trabalhador: id }, 
-      include: Usuario 
+    const trabalhador = await Trabalhador.findOne({
+      where: { id_trabalhador: id },
+      include: Usuario,
     });
 
     if (!trabalhador) {
@@ -51,3 +52,5 @@ const obterTrabalhadorPorId = async (req, res) => {
 };
 
 module.exports = { criarTrabalhador, obterTrabalhadorPorId };
+
+

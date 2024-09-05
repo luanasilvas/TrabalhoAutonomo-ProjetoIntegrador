@@ -5,7 +5,7 @@ import Home from './components/Home';
 import ForgotPassword from './components/RecuperacaoSenha';
 import EnviarProposta from './components/EnviarProposta';
 import AvaliacaoFeedback from './components/AvaliacaoFeedback';
-import Anuncios from './components/PaginaAnuncios';
+import ListaDeAnuncios from './components/ListaDeAnuncios';
 import PerfilCliente from './components/PerfilCliente';
 import PerfilTrabalhador from './components/PerfilTrabalhador';
 import CadastroUsuario from './components/CadastroUsuario';
@@ -19,7 +19,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/" element={<Home />} />
         <Route path="/enviar-proposta" element={<EnviarProposta />} />editar
-        <Route path="/anuncios" element={<Anuncios />} />
+        <Route path="/lista-anuncios" element={<ListaDeAnuncios/>} />
         <Route path="/perfil-cliente" element={<PerfilCliente />} />
         <Route path="/perfil-trabalhador" element={<PerfilTrabalhador />} />
         <Route path="/avaliacao-feedback" element={<AvaliacaoFeedback />} />

@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
     id_usuario: {
       type: DataTypes.INTEGER,
       references: {
-        model: Usuario(sequelize), // Chama a função para obter o modelo
+        model: Usuario(sequelize), // Certifique-se de que o modelo Usuario está sendo passado corretamente
         key: 'id_usuario',
       },
     },
