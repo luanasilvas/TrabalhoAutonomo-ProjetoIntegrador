@@ -3,7 +3,7 @@ const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
 
 // Criar um novo usuário
-router.post('/', usuarioController.cadastrarUsuario);
+router.post('/usuarios', usuarioController.cadastrarUsuario);
 
 // Listar todos os usuários
 router.get('/', usuarioController.listarUsuarios);
