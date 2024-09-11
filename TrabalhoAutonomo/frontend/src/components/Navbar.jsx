@@ -3,7 +3,8 @@ import { AppBar, Toolbar, Typography, IconButton, InputBase, Button } from '@mui
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';  // Importação para navegação
+import { useState } from 'react';  // Para gerenciar o estado do login
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -45,6 +46,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar({ onSidebarOpen }) {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // Estado para controlar se o usuário está logado
+
+  const handleLogout = () => {
+    // Exemplo de como limpar o token de autenticação do localStorage
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/login');
+  };
+
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -58,19 +69,26 @@ function Navbar({ onSidebarOpen }) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          Plataforma de Trabalho Autônomo
+          Meu Aplicativo
         </Typography>
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
-            placeholder="Buscar…"
+            placeholder="Procurar..."
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
-        <Button color="inherit" component={Link} to="/signup">Entrar</Button>
-        <Button color="inherit" component={Link} to="/cadastro-usuario">Cadastrar</Button>
+        {isLoggedIn ? (
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        ) : (
+          <Button color="inherit" onClick={() => navigate('/login')}>
+            Login
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

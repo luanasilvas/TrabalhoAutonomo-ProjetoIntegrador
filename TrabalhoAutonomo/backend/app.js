@@ -1,46 +1,39 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-require('dotenv').config(); // Carregar variáveis de ambiente
+require('dotenv').config();
 
-// Inicialização do Express
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Middlewares
+app.use(cors());
+app.use(bodyParser.json());
+
 // Importar as rotas
-const usuarioRoutes = require('./routes/usuarioRoutes');
+const trabalhadorRoutes = require('./routes/trabalhadorRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
-const profissionalRoutes = require('./routes/profissionalRoutes');
 const propostaRoutes = require('./routes/propostaRoutes');
 const anuncioRoutes = require('./routes/anuncioRoutes');
+const avaliacaoRoutes = require('./routes/avaliacaoRoutes');
 
-// Middleware
-app.use(cors()); // Habilitar CORS
-app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
-
-// Rotas
-app.use('/usuarios', usuarioRoutes);
+// Usar as rotas
+app.use('/trabalhadores', trabalhadorRoutes);
 app.use('/clientes', clienteRoutes);
-app.use('/profissionais', profissionalRoutes);
 app.use('/propostas', propostaRoutes);
 app.use('/anuncios', anuncioRoutes);
+app.use('/avaliacoes', avaliacaoRoutes);
 
 // Conectar ao banco de dados e sincronizar modelos
 const db = require('./models/index');
-console.log(db.Usuario);  // Deve exibir a definição do modelo Usuario
-console.log(db.Trabalhador);  // Deve exibir a definição do modelo Trabalhador
 
-// Testar a conexão com o banco de dados
 db.sequelize.authenticate()
   .then(() => {
     console.log('Conexão com o banco de dados estabelecida com sucesso.');
 
-    // Sincronizar os modelos com o banco de dados
-    db.sequelize.sync() // Para sincronização básica
-    // db.sequelize.sync({ force: true }) // Para sincronização com força (exclui e recria tabelas)
+    db.sequelize.sync()
       .then(() => {
         console.log('Modelos sincronizados com o banco de dados.');
-        // Iniciar o servidor
         app.listen(port, () => {
           console.log(`Servidor rodando na porta ${port}`);
         });

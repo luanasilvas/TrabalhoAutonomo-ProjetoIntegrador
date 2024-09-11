@@ -9,16 +9,33 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';  // Importação de axios para requisições ao back-end
+import { useNavigate } from 'react-router-dom';  // Importação para redirecionamento pós-login
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();  // Para redirecionar o usuário após o registro
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const email = data.get('email');
+    const password = data.get('password');
+
+    // Faz a requisição de cadastro para o back-end
+    axios.post('/api/auth/signup', {
+      email: email,
+      password: password,
+    })
+    .then(response => {
+      console.log(response.data);  // Adicionar lógica para salvar o token JWT, por exemplo
+      // Redireciona para a página inicial após o registro bem-sucedido
+      navigate('/home');
+    })
+    .catch(error => {
+      console.error('Erro ao cadastrar usuário:', error);
+      // Adicionar lógica para lidar com erros
     });
   };
 
@@ -47,20 +64,20 @@ export default function SignUp() {
                 margin="normal"
                 required
                 fullWidth
-                id="Gmail"
+                id="email"
                 label="Endereço Gmail"
-                name="Gmail"
-                autoComplete="Gmail"
+                name="email"
+                autoComplete="email"
                 autoFocus
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="Senha"
+                name="password"
                 label="Senha"
-                type="Senha"
-                id="Senha"
+                type="password"
+                id="password"
                 autoComplete="current-password"
               />
               <Button
@@ -74,13 +91,14 @@ export default function SignUp() {
               <Grid container>
                 <Grid item>
                   <Link href="/cadastro-usuario" variant="body2">
-                    {"Não tenho uma conta? Entrar"}
+                    {"Já tem uma conta? Entrar"}
                   </Link>
-                  <Grid item><Link href="/forgot-password" variant="body2">
+                </Grid>
+                <Grid item>
+                  <Link href="/forgot-password" variant="body2">
                     {"Esqueceu a senha?"}
                   </Link>
-                  </Grid>   
-                </Grid>
+                </Grid>   
               </Grid>
             </Box>
           </Box>

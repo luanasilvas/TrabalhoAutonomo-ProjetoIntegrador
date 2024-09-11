@@ -38,29 +38,31 @@ function RegistrarProfissional() {
     event.preventDefault();
     if (senha !== confirmarSenha) {
       setMensagem('As senhas não coincidem!');
-    } else {
-      try {
-        const formData = new FormData();
-        formData.append('nome', nome);
-        formData.append('email', email);
-        formData.append('username', username);
-        formData.append('senha', senha);
-        formData.append('idade', idade);
-        formData.append('localizacao', localizacao);
-        formData.append('descricao', descricao);
-        formData.append('foto', foto);
-        formData.append('categorias', categoriasSelecionadas.join(', '));
-        formData.append('subcategorias', subcategoriasSelecionadas.join(', '));
-  
-        const response = await axios.post('http://localhost:3000/cadastro-profissional', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        setMensagem(response.data.message || 'Cadastro realizado com sucesso!');
-      } catch (error) {
-        setMensagem('Erro ao cadastrar profissional');
-      }
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('nome', nome);
+      formData.append('email', email);
+      formData.append('username', username);
+      formData.append('senha', senha);
+      formData.append('idade', idade);
+      formData.append('localizacao', localizacao);
+      formData.append('descricao', descricao);
+      formData.append('foto', foto);
+      formData.append('categorias', categoriasSelecionadas.join(', '));
+      formData.append('subcategorias', subcategoriasSelecionadas.join(', '));
+
+      const response = await axios.post('http://localhost:3000//trabalhadores/trabalhador', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      setMensagem(response.data.message || 'Cadastro realizado com sucesso!');
+    } catch (error) {
+      setMensagem('Erro ao cadastrar profissional');
+      console.error('Erro ao cadastrar profissional:', error);
     }
   };
 

@@ -1,4 +1,3 @@
-// db/index.js
 const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../db/config'); 
 
@@ -22,7 +21,17 @@ db.sequelize = sequelize;
 // Definindo modelos
 db.Cliente = require('./clienteModel')(sequelize, DataTypes);
 db.Anuncio = require('./anuncioModel')(sequelize, DataTypes);
-db.Profissional = require('./profissionalModel')(sequelize, DataTypes);
-db.Usuario = require('./usuarioModel')(sequelize, DataTypes);
+db.Trabalhador = require('./trabalhadorModel')(sequelize, DataTypes);  // Substituição de Profissional por Trabalhador
+db.Proposta = require('./propostaModel')(sequelize, DataTypes);        // Adicionando modelo Proposta
+db.Avaliacao = require('./avaliacaoModel')(sequelize, DataTypes);      // Adicionando modelo Avaliacao
+
+// models/index.js
+db.sequelize.sync({ alter: true }) // Use alter: true para ajustar a tabela existente
+  .then(() => {
+    console.log('Modelos sincronizados com o banco de dados.');
+  })
+  .catch((error) => {
+    console.error('Erro ao sincronizar os modelos:', error);
+  });
 
 module.exports = db;

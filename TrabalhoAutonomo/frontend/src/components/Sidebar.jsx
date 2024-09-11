@@ -3,15 +3,20 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText, Avatar, Divider, Ic
 import { Home, AccountCircle, Settings, ExitToApp, Close } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-function Sidebar({ open, onClose }) {
+function Sidebar({ open, onClose, userType }) {  // Adicionado "userType" para diferenciar cliente de trabalhador
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    //navigate('/perfil-cliente');
-     navigate('/perfil-trabalhador');
+    if (userType === 'cliente') {
+      navigate('/perfil-cliente');  // Cliente vai para o perfil de cliente
+    } else if (userType === 'trabalhador') {
+      navigate('/perfil-trabalhador');  // Trabalhador vai para o perfil de trabalhador
+    }
   };
 
   const handleLogout = () => {
+    // Adicionar lógica para limpar o estado de autenticação
+    // Exemplo: localStorage.removeItem('token'); para remover o token JWT
     navigate('/login');
   };
 
@@ -35,7 +40,7 @@ function Sidebar({ open, onClose }) {
             style={{ width: 80, height: 80, marginBottom: 16 }}
             onClick={handleProfileClick}
           />
-          <h4>Nome do Usuário</h4> 
+          <h4>Nome do Usuário</h4> {/* Esse nome pode ser preenchido com dados dinâmicos */}
         </div>
         <Divider />
         <List>
