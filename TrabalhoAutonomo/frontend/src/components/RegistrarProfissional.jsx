@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // Importa o Link para navegação
 
 function RegistrarProfissional() {
   const [nome, setNome] = useState('');
@@ -87,6 +88,19 @@ function RegistrarProfissional() {
         <Typography variant="h4" component="h1" align="center" gutterBottom>
           Cadastro de Profissional Autônomo
         </Typography>
+        
+        {/* Botão para voltar para a página de cadastro de usuário */}
+        <Box sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            component={Link}
+            to="/cadastro-usuario"
+            color="secondary"
+          >
+            Voltar ao Cadastro de Usuário
+          </Button>
+        </Box>
+
         <form onSubmit={handleSubmit}>
           <TextField
             label="Nome"

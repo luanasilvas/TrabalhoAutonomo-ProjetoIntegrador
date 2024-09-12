@@ -85,7 +85,7 @@ function Navbar({ onSidebarOpen }) {
             Logout
           </Button>
         ) : (
-          <Button color="inherit" onClick={() => navigate('/login')}>
+          <Button color="inherit" onClick={() => navigate('/cadastro-usuario')}>
             Login
           </Button>
         )}

@@ -18,15 +18,19 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Definindo modelos
-db.Cliente = require('./clienteModel')(sequelize, DataTypes);
-db.Anuncio = require('./anuncioModel')(sequelize, DataTypes);
-db.Trabalhador = require('./trabalhadorModel')(sequelize, DataTypes);  // Substituição de Profissional por Trabalhador
-db.Proposta = require('./propostaModel')(sequelize, DataTypes);        // Adicionando modelo Proposta
-db.Avaliacao = require('./avaliacaoModel')(sequelize, DataTypes);      // Adicionando modelo Avaliacao
+// Importa os modelos diretamente
+db.Cliente = require('./clienteModel');
+db.Anuncio = require('./anuncioModel');
+db.Trabalhador = require('./trabalhadorModel');
+db.Proposta = require('./propostaModel');
+db.Avaliacao = require('./avaliacaoModel');
 
-// models/index.js
-db.sequelize.sync({ alter: true }) // Use alter: true para ajustar a tabela existente
+// Define as associações, se necessário
+db.Trabalhador.hasMany(db.Avaliacao, { foreignKey: 'id_trabalhador' });
+db.Avaliacao.belongsTo(db.Trabalhador, { foreignKey: 'id_trabalhador' });
+
+// Sincroniza os modelos com o banco de dados
+db.sequelize.sync({ alter: true }) 
   .then(() => {
     console.log('Modelos sincronizados com o banco de dados.');
   })
