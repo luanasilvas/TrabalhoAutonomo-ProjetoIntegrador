@@ -1,3 +1,4 @@
+// controllers/clienteController.js
 const bcrypt = require('bcrypt');
 const db = require('../models');
 const Cliente = db.Cliente;
@@ -40,9 +41,7 @@ const obterClientePorId = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const cliente = await Cliente.findOne({ 
-      where: { id_cliente: id }
-    });
+    const cliente = await Cliente.findOne({ where: { id_cliente: id } });
 
     if (!cliente) {
       return res.status(404).json({ message: 'Cliente não encontrado' });

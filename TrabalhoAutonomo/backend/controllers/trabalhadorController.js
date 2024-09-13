@@ -4,7 +4,8 @@ const Trabalhador = db.Trabalhador;
 
 // Função para criar um trabalhador
 const criarTrabalhador = async (req, res) => {
-  const { username, nome, email, senha, descricao, habilidades, localizacao, avaliacao, foto_perfil } = req.body;
+  const { username, nome, email, senha, descricao, habilidades, localizacao, avaliacao } = req.body;
+  const foto_perfil = req.file ? req.file.path : null;
 
   try {
     if (!username || !nome || !email || !senha) {
@@ -43,7 +44,7 @@ const obterTrabalhadorPorId = async (req, res) => {
 
   try {
     const trabalhador = await Trabalhador.findOne({ 
-      where: { id_trabalhador: id }
+      where: { id }
     });
 
     if (!trabalhador) {
@@ -74,7 +75,7 @@ const editarTrabalhador = async (req, res) => {
   const { username, nome, email, senha, descricao, habilidades, localizacao, avaliacao, foto_perfil } = req.body;
 
   try {
-    const trabalhador = await Trabalhador.findOne({ where: { id_trabalhador: id } });
+    const trabalhador = await Trabalhador.findOne({ where: { id } });
 
     if (!trabalhador) {
       return res.status(404).json({ message: 'Trabalhador não encontrado' });
@@ -107,7 +108,7 @@ const excluirTrabalhador = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const trabalhador = await Trabalhador.findOne({ where: { id_trabalhador: id } });
+    const trabalhador = await Trabalhador.findOne({ where: { id } });
 
     if (!trabalhador) {
       return res.status(404).json({ message: 'Trabalhador não encontrado' });

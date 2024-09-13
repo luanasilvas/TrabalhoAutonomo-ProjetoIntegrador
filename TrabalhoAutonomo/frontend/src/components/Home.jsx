@@ -1,3 +1,4 @@
+// src/components/Home.jsx
 import React, { useState } from 'react';
 import { Container, Typography, Box, Button, Grid, Card, CardContent, CardMedia, Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -14,25 +15,21 @@ import img7 from '../assets/img/robinson-greig-HrnAxAUwle8-unsplash.jpg';
 import img8 from '../assets/img/samsung-memory-seUxMX-DhAQ-unsplash.jpg';
 
 function Home() {
-  // Estado da barra lateral
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  // Estado menu de subcategoria
   const [anchorEl, setAnchorEl] = useState(null);
   const [subcategorias, setSubcategorias] = useState([]);
   const navigate = useNavigate();
 
-  // Barra lateral
   const handleDrawerOpen = () => {
     setSidebarOpen(true);
   };
   const handleDrawerClose = () => {
     setSidebarOpen(false);
   };
-  const handleCategoriaClick = (event, categoria) => {
-    setAnchorEl(event.currentTarget); 
 
-    // Subcategorias 
+  const handleCategoriaClick = (event, categoria) => {
+    setAnchorEl(event.currentTarget);
+
     switch (categoria) {
       case 'Assistência Técnica':
         setSubcategorias(['Eletrônicos', 'Eletrodomésticos', 'Computadores']);
@@ -71,96 +68,43 @@ function Home() {
     navigate('/anuncios', { state: { subcategoria } });
     handleMenuClose();
   };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  // Categorias
   const categorias = [
     'Assistência Técnica', 'Aulas', 'Design e Tecnologia', 
     'Eventos', 'Moda e Beleza', 'Reformas e Construção', 
     'Serviços Domésticos', 'Fretes e Mudanças', 'Pets'
   ];
 
-  // Carrossel
   const servicos = [
-    {
-      nome: 'Diarista',
-      descricao: '',
-      imagem: img1,
-    },
-    {
-      nome: 'Mestre de obra',
-      descricao: 'Descrição do serviço 2',
-      imagem: img2,
-    },
-    {
-      nome: 'Eletricista',
-      descricao: 'Descrição do serviço 3',
-      imagem: img3,
-    },
-    {
-      nome: 'Editor de videos',
-      descricao: 'Descrição do serviço 4',
-      imagem: img4,
-    },
-    {
-      nome: 'Desenvolvedor',
-      descricao: 'Descrição do serviço 5',
-      imagem: img5,
-    },
-    {
-      nome: 'Redator',
-      descricao: 'Descrição do serviço 6',
-      imagem: img6,
-    },
-    {
-      nome: 'Mudanças',
-      descricao: 'Descrição do serviço 7',
-      imagem: img7,
-    },
-    {
-      nome: 'Fotografo',
-      descricao: 'Descrição do serviço 8',
-      imagem: img8,
-    },
+    { nome: 'Diarista', descricao: '', imagem: img1 },
+    { nome: 'Mestre de obra', descricao: 'Descrição do serviço 2', imagem: img2 },
+    { nome: 'Eletricista', descricao: 'Descrição do serviço 3', imagem: img3 },
+    { nome: 'Editor de videos', descricao: 'Descrição do serviço 4', imagem: img4 },
+    { nome: 'Desenvolvedor', descricao: 'Descrição do serviço 5', imagem: img5 },
+    { nome: 'Redator', descricao: 'Descrição do serviço 6', imagem: img6 },
+    { nome: 'Mudanças', descricao: 'Descrição do serviço 7', imagem: img7 },
+    { nome: 'Fotografo', descricao: 'Descrição do serviço 8', imagem: img8 }
   ];
 
   const dicasSeguranca = [
-    {
-      titulo: 'Dica 1',
-      descricao: 'Descrição da dica 1',
-      imagem: 'link_da_imagem_1',
-    },
-    {
-      titulo: 'Dica 2',
-      descricao: 'Descrição da dica 2',
-      imagem: 'link_da_imagem_2',
-    },
+    { titulo: 'Dica 1', descricao: 'Descrição da dica 1', imagem: 'link_da_imagem_1' },
+    { titulo: 'Dica 2', descricao: 'Descrição da dica 2', imagem: 'link_da_imagem_2' }
   ];
 
-//Style da paina
-  
   return (
     <div style={{ display: 'flex' }}>
-      {/* Componente da barra lateral */}
       <Sidebar open={sidebarOpen} onClose={handleDrawerClose} />
-      
-      {/* Conteúdo principal */}
       <div style={{ flexGrow: 1 }}>
-        
-        {/* Componente de navegação superior */}
         <Navbar onSidebarOpen={handleDrawerOpen} />
-        
-        {/* Container principal da página */}
         <Container maxWidth="lg" style={{ padding: 20 }}>
-          
           <Box sx={{ mt: 4, mb: 4 }}>
             <Typography variant="h4" component="h1" gutterBottom>
               Bem-vindo à Plataforma de Trabalho Autônomo
             </Typography>
-            
-            {/* Grid de categorias */}
             <Grid container spacing={2}>
               {categorias.map((categoria) => (
                 <Grid item xs={12} sm={6} md={4} key={categoria}>
@@ -176,8 +120,6 @@ function Home() {
                 </Grid>
               ))}
             </Grid>
-
-            {/* Menu de subcategorias */}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -189,8 +131,6 @@ function Home() {
                 </MenuItem>
               ))}
             </Menu>
-
-            {/* Carrossel de Principais Serviços */}
             <Typography variant="h5" component="h2" gutterBottom>
               Principais Serviços
             </Typography>
@@ -214,8 +154,6 @@ function Home() {
                 </Card>
               ))}
             </Carousel>
-
-            {/* Seção sobre o site */}
             <Box sx={{ mt: 4, mb: 4 }}>
               <Typography variant="h6" component="h2" gutterBottom>
                 Sobre o Site
@@ -225,8 +163,6 @@ function Home() {
                 Oferecemos uma ampla gama de categorias e subcategorias para ajudar nossos usuários a encontrar o profissional certo.
               </Typography>
             </Box>
-
-            {/* Carrossel de Dicas de Segurança */}
             <Typography variant="h5" component="h2" gutterBottom>
               Dicas de Segurança
             </Typography>

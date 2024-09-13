@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Importa o Link para navegação
+import { Link, useNavigate } from 'react-router-dom'; 
 
 function RegistrarProfissional() {
   const [nome, setNome] = useState('');
@@ -10,12 +10,13 @@ function RegistrarProfissional() {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [foto, setFoto] = useState(null);
   const [idade, setIdade] = useState('');
+  const [foto, setFoto] = useState(null);
   const [localizacao, setLocalizacao] = useState('');
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
   const [subcategoriasSelecionadas, setSubcategoriasSelecionadas] = useState([]);
   const [mensagem, setMensagem] = useState('');
+  const navigate = useNavigate();
 
   const categorias = [
     'Assistência Técnica', 'Aulas', 'Design e Tecnologia', 
@@ -48,22 +49,25 @@ function RegistrarProfissional() {
       formData.append('email', email);
       formData.append('username', username);
       formData.append('senha', senha);
-      formData.append('idade', idade);
-      formData.append('localizacao', localizacao);
       formData.append('descricao', descricao);
-      formData.append('foto', foto);
+      formData.append('localizacao', localizacao);
+      formData.append('idade', idade);
+      if (foto) {
+        formData.append('foto_perfil', foto);
+      }
       formData.append('categorias', categoriasSelecionadas.join(', '));
       formData.append('subcategorias', subcategoriasSelecionadas.join(', '));
 
-      const response = await axios.post('http://localhost:3000//trabalhadores/trabalhador', formData, {
+      const response = await axios.post('http://localhost:3000/trabalhadores/trabalhador', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       setMensagem(response.data.message || 'Cadastro realizado com sucesso!');
+      navigate('/');  
     } catch (error) {
-      setMensagem('Erro ao cadastrar profissional');
-      console.error('Erro ao cadastrar profissional:', error);
+      console.error('Erro ao cadastrar profissional:', error.response ? error.response.data : error.message);
+      setMensagem('Erro ao cadastrar profissional. Verifique o console para mais detalhes.');
     }
   };
 
@@ -74,7 +78,7 @@ function RegistrarProfissional() {
   const handleCategoriaChange = (event) => {
     const { value } = event.target;
     setCategoriasSelecionadas(value);
-    setSubcategoriasSelecionadas(subcategorias[value[0]] || []);
+    setSubcategoriasSelecionadas([]); // Limpa as subcategorias selecionadas
   };
 
   const handleSubcategoriaChange = (event) => {
@@ -89,7 +93,6 @@ function RegistrarProfissional() {
           Cadastro de Profissional Autônomo
         </Typography>
         
-        {/* Botão para voltar para a página de cadastro de usuário */}
         <Box sx={{ mb: 2 }}>
           <Button
             variant="contained"
@@ -209,7 +212,6 @@ function RegistrarProfissional() {
                   <MenuItem
                     key={subcategoria}
                     value={subcategoria}
-                    selected={subcategoriasSelecionadas.includes(subcategoria)}
                   >
                     {subcategoria}
                   </MenuItem>

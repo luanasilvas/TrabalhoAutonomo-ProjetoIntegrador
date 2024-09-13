@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, InputBase, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
-import { Link, useNavigate } from 'react-router-dom';  // Importação para navegação
-import { useState } from 'react';  // Para gerenciar o estado do login
+import { Link, useNavigate } from 'react-router-dom'; 
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -47,10 +46,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function Navbar({ onSidebarOpen }) {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  // Estado para controlar se o usuário está logado
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Verifica o estado de login ao iniciar o componente
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleLogout = () => {
-    // Exemplo de como limpar o token de autenticação do localStorage
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     navigate('/login');
@@ -85,9 +89,14 @@ function Navbar({ onSidebarOpen }) {
             Logout
           </Button>
         ) : (
-          <Button color="inherit" onClick={() => navigate('/cadastro-usuario')}>
-            Login
-          </Button>
+          <>
+            <Button color="inherit" component={Link} to="/cadastro-usuario">
+              Cadastro
+            </Button>
+            <Button color="inherit" component={Link} to="/login">
+              Login
+            </Button>
+          </>
         )}
       </Toolbar>
     </AppBar>

@@ -1,41 +1,30 @@
+// models/index.js
 const { Sequelize, DataTypes } = require('sequelize');
-const config = require('../db/config'); 
-
-const environment = process.env.NODE_ENV || 'development';
-const configEnv = config[environment];
-
-// Inicialização do Sequelize
-const sequelize = new Sequelize(configEnv.database, configEnv.username, configEnv.password, {
-  host: configEnv.host,
-  port: configEnv.port,
-  dialect: configEnv.dialect,
-  logging: console.log,
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'mysql',
+  port: process.env.DB_PORT,
 });
 
 const db = {};
 
-// Importa os modelos
-db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
-// Importa os modelos diretamente
-db.Cliente = require('./clienteModel');
-db.Anuncio = require('./anuncioModel');
-db.Trabalhador = require('./trabalhadorModel');
-db.Proposta = require('./propostaModel');
-db.Avaliacao = require('./avaliacaoModel');
+// Importar modelos
+db.Trabalhador = require('./trabalhadorModel')(sequelize, DataTypes);
+db.Cliente = require('./clienteModel')(sequelize, DataTypes);
+db.Proposta = require('./propostaModel')(sequelize, DataTypes);
+db.Anuncio = require('./anuncioModel')(sequelize, DataTypes);
+db.Avaliacao = require('./avaliacaoModel')(sequelize, DataTypes);
 
-// Define as associações, se necessário
+// Definir relacionamentos
 db.Trabalhador.hasMany(db.Avaliacao, { foreignKey: 'id_trabalhador' });
-db.Avaliacao.belongsTo(db.Trabalhador, { foreignKey: 'id_trabalhador' });
+db.Cliente.hasMany(db.Avaliacao, { foreignKey: 'id_cliente' });
 
-// Sincroniza os modelos com o banco de dados
-db.sequelize.sync({ alter: true }) 
-  .then(() => {
-    console.log('Modelos sincronizados com o banco de dados.');
-  })
-  .catch((error) => {
-    console.error('Erro ao sincronizar os modelos:', error);
-  });
+// Outras associações
+db.Cliente.hasMany(db.Proposta, { foreignKey: 'id_cliente' });
+db.Trabalhador.hasMany(db.Proposta, { foreignKey: 'id_trabalhador' });
+db.Trabalhador.hasMany(db.Anuncio, { foreignKey: 'id_trabalhador' });
 
 module.exports = db;

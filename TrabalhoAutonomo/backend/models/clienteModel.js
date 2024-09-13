@@ -1,50 +1,46 @@
-  module.exports = (sequelize, DataTypes) => {
-  const Trabalhador = sequelize.define('Trabalhador', {
-    id_trabalhador: {
+// models/clienteModel.js
+module.exports = (sequelize, DataTypes) => {
+  const Cliente = sequelize.define('Cliente', {
+    id_cliente: {
       type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
-      autoIncrement: true
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     nome: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       unique: true,
-      allowNull: false
     },
     senha: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
-    descricao: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    habilidades: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    localizacao: {
-      type: DataTypes.STRING,
-      allowNull: false
+    historico_contratacoes: {
+      type: DataTypes.TEXT,
     },
     avaliacao: {
       type: DataTypes.FLOAT,
-      allowNull: false
     },
-    foto_perfil: {
+    localizacao: {
       type: DataTypes.STRING,
-      allowNull: false
     },
     data_criacao: {
       type: DataTypes.DATE,
-      allowNull: false
-    }
+      defaultValue: DataTypes.NOW,
+    },
   }, {
-    timestamps: true
+    timestamps: false,  
+    tableName: 'Clientes',
   });
 
-  return Trabalhador;
+  return Cliente;
 };

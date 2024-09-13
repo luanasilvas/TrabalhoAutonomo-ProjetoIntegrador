@@ -1,11 +1,14 @@
-const { DataTypes } = require('sequelize');
-
-module.exports = (sequelize) => {
+// models/anuncioModel.js
+module.exports = (sequelize, DataTypes) => {
   const Anuncio = sequelize.define('Anuncio', {
-    id_anuncio: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    id_trabalhador: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     titulo: {
       type: DataTypes.STRING,
@@ -13,18 +16,16 @@ module.exports = (sequelize) => {
     },
     descricao: {
       type: DataTypes.TEXT,
-      allowNull: false,
     },
-    preco: {
+    valor: {
       type: DataTypes.FLOAT,
-      allowNull: false,
     },
-    id_profissional: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    data_criacao: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
   }, {
-    tableName: 'anuncios',
+    tableName: 'Anuncios',
     timestamps: false,
   });
 

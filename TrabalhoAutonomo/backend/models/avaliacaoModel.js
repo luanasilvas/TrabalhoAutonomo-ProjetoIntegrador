@@ -1,39 +1,34 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../db/dbConnection');
-
-const Avaliacao = sequelize.define('Avaliacao', {
-  id_avaliacao: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  id_trabalhador: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: 'Trabalhador',
-      key: 'id_trabalhador'
+// models/avaliacaoModel.js
+module.exports = (sequelize, DataTypes) => {
+  const Avaliacao = sequelize.define('Avaliacao', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    allowNull: false
-  },
-  id_usuario: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  avaliacao: {
-    type: DataTypes.FLOAT,
-    allowNull: false
-  },
-  comentario: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  data_avaliacao: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  }
-}, {
-  timestamps: true
-});
+    id_trabalhador: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    id_cliente: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    nota: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    comentario: {
+      type: DataTypes.TEXT,
+    },
+    data: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+  }, {
+    tableName: 'Avaliacoes',
+    timestamps: false,
+  });
 
-module.exports = Avaliacao;
+  return Avaliacao;
+};

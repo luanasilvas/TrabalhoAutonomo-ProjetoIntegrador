@@ -1,57 +1,55 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../db/dbConnection');
+module.exports = (sequelize, DataTypes) => {
+  const Trabalhador = sequelize.define('Trabalhador', {
+    nome: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    nome: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    senha: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    descricao: {
+      type: DataTypes.TEXT,
+    },
+    habilidades: {
+      type: DataTypes.TEXT,
+    },
+    localizacao: {
+      type: DataTypes.STRING,
+    },
+    avaliacao: {
+      type: DataTypes.FLOAT,
+    },
+    foto_perfil: {
+      type: DataTypes.STRING,
+    },
+    data_criacao: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+  }, {
+    timestamps: true, // Habilita createdAt e updatedAt
+    tableName: 'Trabalhadores',
+  });
 
-const Trabalhador = sequelize.define('Trabalhador', {
-  id_trabalhador: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  senha: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  descricao: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  habilidades: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  localizacao: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  avaliacao: {
-    type: DataTypes.FLOAT,
-    allowNull: true
-  },
-  foto_perfil: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  data_criacao: {
-    type: DataTypes.DATE,
-    allowNull: true,
-    defaultValue: DataTypes.NOW
-  }
-}, {
-  timestamps: true
-});
-
-module.exports = Trabalhador;
+  return Trabalhador;
+};

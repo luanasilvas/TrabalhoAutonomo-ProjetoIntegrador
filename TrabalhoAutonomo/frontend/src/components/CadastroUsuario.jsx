@@ -1,18 +1,18 @@
+// src/components/CadastroUsuario.jsx
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Importação do Link
+import { Link, useNavigate } from 'react-router-dom'; 
 
 function CadastroUsuario() {
-  const [username, setUsername] = useState(''); // Adiciona o campo username
+  const [username, setUsername] = useState(''); 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [historicoContratacoes, setHistoricoContratacoes] = useState(''); // Adiciona o campo historicoContratacoes
-  const [avaliacao, setAvaliacao] = useState(''); // Adiciona o campo avaliacao
-  const [localizacao, setLocalizacao] = useState(''); // Adiciona o campo localizacao
+  const [localizacao, setLocalizacao] = useState(''); 
   const [mensagem, setMensagem] = useState('');
+  const navigate = useNavigate(); // Definido corretamente
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,16 +22,15 @@ function CadastroUsuario() {
     }
     
     try {
-      const response = await axios.post('http://localhost:3000/clientes/cliente', {
+      await axios.post('http://localhost:3000/clientes/cliente', {
         username,
         nome,
         email,
         senha,
-        historico_contratacoes: historicoContratacoes,
-        avaliacao,
         localizacao
       });
       setMensagem('Usuário cadastrado com sucesso!');
+      navigate('/'); // Navega para a página inicial
     } catch (error) {
       setMensagem('Erro ao cadastrar usuário');
       console.error('Erro ao cadastrar usuário:', error);
@@ -99,23 +98,6 @@ function CadastroUsuario() {
           required
           value={confirmarSenha}
           onChange={(e) => setConfirmarSenha(e.target.value)}
-        />
-        <TextField
-          label="Histórico de Contratações"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={historicoContratacoes}
-          onChange={(e) => setHistoricoContratacoes(e.target.value)}
-        />
-        <TextField
-          label="Avaliação"
-          type="number"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={avaliacao}
-          onChange={(e) => setAvaliacao(e.target.value)}
         />
         <TextField
           label="Localização"
