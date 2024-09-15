@@ -1,22 +1,28 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Avatar, Divider, IconButton } from '@mui/material';
-import { Home, AccountCircle, Settings, ExitToApp, Close } from '@mui/icons-material';
+import { Home, AccountCircle, Settings, ExitToApp, Close, Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 function Sidebar({ open, onClose, user }) {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    if (user && user.type === 'cliente') {
-      navigate('/perfil-cliente');
-    } else if (user && user.type === 'trabalhador') {
-      navigate('/perfil-trabalhador');
+    if (user) {
+      if (user.type === 'cliente') {
+        navigate('/perfil-cliente'); // Substitua pela rota do perfil do cliente
+      } else if (user.type === 'trabalhador') {
+        navigate('/perfil-trabalhador'); // Substitua pela rota do perfil do trabalhador
+      }
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
+  };
+
+  const handleCreateAnuncio = () => {
+    navigate('/criar-anuncio'); // Ajuste o caminho conforme sua configuração
   };
 
   return (
@@ -35,11 +41,11 @@ function Sidebar({ open, onClose, user }) {
             <Close />
           </IconButton>
           <Avatar
-            src="link_para_imagem_de_perfil.jpg"
+            src={user?.profilePicture || "link_para_imagem_de_perfil.jpg"} // Substitua com o link da imagem do perfil
             style={{ width: 80, height: 80, marginBottom: 16 }}
             onClick={handleProfileClick}
           />
-          <h4>{user?.name || 'Usuário'}</h4> {/* Verificação de segurança */}
+          <h4>{user?.name || 'Usuário'}</h4>
         </div>
         <Divider />
         <List>
@@ -54,6 +60,10 @@ function Sidebar({ open, onClose, user }) {
           <ListItem button onClick={() => navigate('/settings')}>
             <ListItemIcon><Settings /></ListItemIcon>
             <ListItemText primary="Configurações" />
+          </ListItem>
+          <ListItem button onClick={handleCreateAnuncio}>
+            <ListItemIcon><Add /></ListItemIcon>
+            <ListItemText primary="Criar Anúncio" />
           </ListItem>
           <ListItem button onClick={handleLogout}>
             <ListItemIcon><ExitToApp /></ListItemIcon>

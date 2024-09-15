@@ -1,10 +1,11 @@
-// controllers/propostaController.js
 const { Proposta, Cliente, Trabalhador } = require('../models');
 
+// Função para criar uma proposta (POST /propostas)
 const criarProposta = async (req, res) => {
   const { id_cliente, id_trabalhador, descricao, valor } = req.body;
 
   try {
+    // Cria uma nova proposta
     const novaProposta = await Proposta.create({
       id_cliente,
       id_trabalhador,
@@ -19,10 +20,12 @@ const criarProposta = async (req, res) => {
   }
 };
 
+// Função para obter uma proposta por ID (GET /propostas/:id)
 const obterPropostaPorId = async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Busca a proposta pelo ID
     const proposta = await Proposta.findByPk(id);
 
     if (!proposta) {
@@ -36,8 +39,10 @@ const obterPropostaPorId = async (req, res) => {
   }
 };
 
+// Função para obter todas as propostas (GET /propostas)
 const obterTodasPropostas = async (req, res) => {
   try {
+    // Busca todas as propostas
     const propostas = await Proposta.findAll();
     res.status(200).json(propostas);
   } catch (error) {
@@ -46,17 +51,20 @@ const obterTodasPropostas = async (req, res) => {
   }
 };
 
+// Função para editar uma proposta (PUT /propostas/:id)
 const editarProposta = async (req, res) => {
   const { id } = req.params;
   const { descricao, valor, status } = req.body;
 
   try {
+    // Busca a proposta pelo ID
     const proposta = await Proposta.findByPk(id);
 
     if (!proposta) {
       return res.status(404).json({ message: 'Proposta não encontrada' });
     }
 
+    // Atualiza os campos se forem enviados
     proposta.descricao = descricao || proposta.descricao;
     proposta.valor = valor || proposta.valor;
     proposta.status = status || proposta.status;
@@ -70,16 +78,19 @@ const editarProposta = async (req, res) => {
   }
 };
 
+// Função para excluir uma proposta (DELETE /propostas/:id)
 const excluirProposta = async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Busca a proposta pelo ID
     const proposta = await Proposta.findByPk(id);
 
     if (!proposta) {
       return res.status(404).json({ message: 'Proposta não encontrada' });
     }
 
+    // Exclui a proposta
     await proposta.destroy();
     res.status(200).json({ message: 'Proposta excluída com sucesso' });
   } catch (error) {

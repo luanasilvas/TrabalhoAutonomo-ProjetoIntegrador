@@ -1,24 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Avatar, Divider, Grid, Card, CardContent, Button, TextField } from '@mui/material';
+import axios from 'axios';
 
 function PerfilCliente() {
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState({
-    name: 'João Silva',
-    email: 'joao.silva@example.com',
-    bio: 'Apaixonado por tecnologia e desenvolvimento de software.',
-    profilePicture: 'link_para_imagem_de_perfil.jpg',
-    age: 30,
-    location: 'São Paulo, SP',
-    reviews: [
-      { id: 1, author: 'Ana Souza', rating: 4, comment: 'Ótimo cliente, pagamento rápido e comunicação clara.' },
-      { id: 2, author: 'Carlos Silva', rating: 5, comment: 'Excelente cliente! Muito fácil de trabalhar.' },
-    ],
-    hiringHistory: [
-      { id: 1, service: 'Desenvolvimento de Website', date: '2024-06-15', status: 'Concluído' },
-      { id: 2, service: 'Design Gráfico', date: '2024-08-01', status: 'Em andamento' },
-    ],
+    name: '',
+    email: '',
+    bio: '',
+    profilePicture: '',
+    age: '',
+    location: '',
+    reviews: [],
+    hiringHistory: [],
   });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('/api/user/profile'); // Substitua com a URL real da sua API
+        setUser(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);

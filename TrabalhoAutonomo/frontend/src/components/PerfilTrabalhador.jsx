@@ -1,30 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Avatar, Card, CardContent, CardMedia, Grid, Divider, Button } from '@mui/material';
-import img1 from '../assets/img/anton-SnKfmC1I9fU-unsplash.jpg';
+import axios from 'axios'; // Importar o axios para fazer requisições HTTP
 
 function PerfilTrabalhador() {
-  const worker = {
-    name: 'Maria Oliveira',
-    profession: 'Designer Gráfico',
-    description: 'Especialista em design gráfico com 10 anos de experiência.',
-    profilePicture: img1,
-    portfolio: [
-      { title: 'Projeto 1', image: img1, description: 'Descrição do projeto 1' },
-      { title: 'Projeto 2', image: img1, description: 'Descrição do projeto 2' },
-    ],
-    age: 35,
-    location: 'Rio de Janeiro, RJ',
-    contact: 'maria.oliveira@example.com',
-    skills: ['Photoshop', 'Illustrator', 'InDesign'],
-    reviews: [
-      { client: 'João Silva', rating: 5, comment: 'Excelente trabalho, super recomendo!' },
-      { client: 'Ana Costa', rating: 4, comment: 'Muito boa a comunicação, mas o projeto atrasou um pouco.' },
-    ],
-    hiringHistory: [
-      { client: 'Carlos Mendes', service: 'Criação de logotipo', date: '01/2024' },
-      { client: 'Luciana Ribeiro', service: 'Design de cartão de visita', date: '12/2023' },
-    ],
-  };
+  const [worker, setWorker] = useState({
+    name: '',
+    profession: '',
+    description: '',
+    profilePicture: '',
+    portfolio: [],
+    age: '',
+    location: '',
+    contact: '',
+    skills: [],
+    reviews: [],
+    hiringHistory: [],
+  });
+
+  useEffect(() => {
+    const fetchWorkerData = async () => {
+      try {
+        // Substitua a URL pelo endpoint real da sua API
+        const response = await axios.get('/api/worker/profile'); 
+        setWorker(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar dados do trabalhador:', error);
+      }
+    };
+
+    fetchWorkerData();
+  }, []);
 
   const handleEditProfile = () => {
     console.log('Editar Perfil');

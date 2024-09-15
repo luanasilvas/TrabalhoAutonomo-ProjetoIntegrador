@@ -46,10 +46,10 @@ export default function ForgotPassword() {
                 margin="normal"
                 required
                 fullWidth
-                id="Gmail"
-                label="Endereço Gmail"
-                name="Gmail"
-                autoComplete="Gmail"
+                id="email"
+                label="Endereço de E-mail"
+                name="email"
+                autoComplete="email"
                 autoFocus
               />
               <Button

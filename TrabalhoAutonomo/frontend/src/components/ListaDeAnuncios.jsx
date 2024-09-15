@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { obterTodosAnuncios } from '../services/api'; // Importa a função da API
 
 const ListaDeAnuncios = () => {
   const [anuncios, setAnuncios] = useState([]);
-  const [loading, setLoading] = useState(true); // Adicionado para gerenciar o estado de carregamento
-  const [error, setError] = useState(null); // Adicionado para gerenciar erros
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchAnuncios = async () => {
       try {
-        const response = await axios.get('/api/anuncios'); // Altere o URL para o endpoint da sua API
+        const response = await obterTodosAnuncios(); // Usa a função da API
         setAnuncios(response.data);
       } catch (error) {
         console.error('Erro ao carregar os anúncios', error);
         setError(error);
       } finally {
-        setLoading(false); // Remove o carregamento após a requisição
+        setLoading(false);
       }
     };
 
@@ -34,9 +34,10 @@ const ListaDeAnuncios = () => {
     <div>
       {anuncios.length > 0 ? (
         anuncios.map(anuncio => (
-          <div key={anuncio.id}>
+          <div key={anuncio.id_anuncio}>
             <h2>{anuncio.titulo}</h2>
             <p>{anuncio.descricao}</p>
+            <p>Preço: {anuncio.preco}</p>
           </div>
         ))
       ) : (

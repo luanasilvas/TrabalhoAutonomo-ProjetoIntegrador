@@ -1,32 +1,33 @@
-// models/anuncioModel.js
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {   
   const Anuncio = sequelize.define('Anuncio', {
-    id: {
+    id_anuncio: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+      autoIncrement: true, // ID autoincrementado para cada anúncio
+      primaryKey: true, // Chave primária
     },
     id_trabalhador: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false, // ID do trabalhador associado ao anúncio
     },
     titulo: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, // Título do anúncio
     },
     descricao: {
       type: DataTypes.TEXT,
+      allowNull: false, // Descrição detalhada do anúncio
     },
-    valor: {
-      type: DataTypes.FLOAT,
+    preco: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true, // Preço do serviço oferecido (pode ser nulo)
     },
-    data_criacao: {
+    data_publicacao: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: DataTypes.NOW, // Data de publicação do anúncio
     },
   }, {
-    tableName: 'Anuncios',
-    timestamps: false,
+    tableName: 'Anuncios', // Define o nome da tabela no banco de dados
+    timestamps: false, // Não usa createdAt e updatedAt
   });
 
   return Anuncio;

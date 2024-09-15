@@ -2,23 +2,27 @@ const bcrypt = require('bcrypt');
 const db = require('../models');
 const Trabalhador = db.Trabalhador;
 
-// Função para criar um trabalhador
+// Função para criar um trabalhador (POST /trabalhadores)
 const criarTrabalhador = async (req, res) => {
   const { username, nome, email, senha, descricao, habilidades, localizacao, avaliacao } = req.body;
   const foto_perfil = req.file ? req.file.path : null;
 
   try {
+    // Validação básica para campos obrigatórios
     if (!username || !nome || !email || !senha) {
       return res.status(400).json({ message: 'Os campos username, nome, email e senha são obrigatórios.' });
     }
 
+    // Verifica se o trabalhador com o mesmo email já existe
     const trabalhadorExistente = await Trabalhador.findOne({ where: { email } });
     if (trabalhadorExistente) {
       return res.status(400).json({ message: 'Email já está em uso.' });
     }
 
+    // Hash da senha
     const hashSenha = await bcrypt.hash(senha, 10);
 
+    // Criação de um novo trabalhador
     const novoTrabalhador = await Trabalhador.create({
       username,
       nome,
@@ -38,14 +42,13 @@ const criarTrabalhador = async (req, res) => {
   }
 };
 
-// Função para obter um trabalhador por ID
+// Função para obter um trabalhador por ID (GET /trabalhadores/:id)
 const obterTrabalhadorPorId = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const trabalhador = await Trabalhador.findOne({ 
-      where: { id }
-    });
+    // Busca o trabalhador pelo ID
+    const trabalhador = await Trabalhador.findOne({ where: { id_trabalhador: id } });
 
     if (!trabalhador) {
       return res.status(404).json({ message: 'Trabalhador não encontrado' });
@@ -58,9 +61,10 @@ const obterTrabalhadorPorId = async (req, res) => {
   }
 };
 
-// Função para obter todos os trabalhadores
+// Função para obter todos os trabalhadores (GET /trabalhadores)
 const obterTodosTrabalhadores = async (req, res) => {
   try {
+    // Busca todos os trabalhadores
     const trabalhadores = await Trabalhador.findAll();
     res.status(200).json(trabalhadores);
   } catch (error) {
@@ -69,22 +73,25 @@ const obterTodosTrabalhadores = async (req, res) => {
   }
 };
 
-// Função para editar um trabalhador
+// Função para editar um trabalhador (PUT /trabalhadores/:id)
 const editarTrabalhador = async (req, res) => {
   const { id } = req.params;
-  const { username, nome, email, senha, descricao, habilidades, localizacao, avaliacao, foto_perfil } = req.body;
+  const { username, nome, email, senha, descricao, habilidades, localizacao, avaliacao } = req.body;
 
   try {
-    const trabalhador = await Trabalhador.findOne({ where: { id } });
+    // Busca o trabalhador pelo ID
+    const trabalhador = await Trabalhador.findOne({ where: { id_trabalhador: id } });
 
     if (!trabalhador) {
       return res.status(404).json({ message: 'Trabalhador não encontrado' });
     }
 
+    // Atualiza a senha se for enviada
     if (senha) {
       trabalhador.senha = await bcrypt.hash(senha, 10);
     }
 
+    // Atualiza os outros campos se forem enviados
     trabalhador.username = username || trabalhador.username;
     trabalhador.nome = nome || trabalhador.nome;
     trabalhador.email = email || trabalhador.email;
@@ -92,7 +99,6 @@ const editarTrabalhador = async (req, res) => {
     trabalhador.habilidades = habilidades || trabalhador.habilidades;
     trabalhador.localizacao = localizacao || trabalhador.localizacao;
     trabalhador.avaliacao = avaliacao || trabalhador.avaliacao;
-    trabalhador.foto_perfil = foto_perfil || trabalhador.foto_perfil;
 
     await trabalhador.save();
 
@@ -103,17 +109,19 @@ const editarTrabalhador = async (req, res) => {
   }
 };
 
-// Função para excluir um trabalhador
+// Função para excluir um trabalhador (DELETE /trabalhadores/:id)
 const excluirTrabalhador = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const trabalhador = await Trabalhador.findOne({ where: { id } });
+    // Busca o trabalhador pelo ID
+    const trabalhador = await Trabalhador.findOne({ where: { id_trabalhador: id } });
 
     if (!trabalhador) {
       return res.status(404).json({ message: 'Trabalhador não encontrado' });
     }
 
+    // Exclui o trabalhador
     await trabalhador.destroy();
 
     res.status(200).json({ message: 'Trabalhador excluído com sucesso' });

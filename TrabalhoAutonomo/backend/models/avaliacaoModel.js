@@ -1,33 +1,32 @@
-// models/avaliacaoModel.js
 module.exports = (sequelize, DataTypes) => {
   const Avaliacao = sequelize.define('Avaliacao', {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+      autoIncrement: true, // ID autoincrementado para cada avaliação
+      primaryKey: true, // Chave primária
     },
     id_trabalhador: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false, // ID do trabalhador avaliado
     },
     id_cliente: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false, // ID do cliente que fez a avaliação
     },
     nota: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: false, // Nota dada pelo cliente
     },
     comentario: {
-      type: DataTypes.TEXT,
+      type: DataTypes.TEXT, // Comentário opcional do cliente
     },
     data: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: DataTypes.NOW, // Data da avaliação
     },
   }, {
-    tableName: 'Avaliacoes',
-    timestamps: false,
+    tableName: 'Avaliacoes', // Nome da tabela no banco
+    timestamps: false, // Desabilita os timestamps automáticos
   });
 
   return Avaliacao;

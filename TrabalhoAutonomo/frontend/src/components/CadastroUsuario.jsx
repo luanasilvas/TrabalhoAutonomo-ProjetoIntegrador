@@ -1,4 +1,3 @@
-// src/components/CadastroUsuario.jsx
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
@@ -12,16 +11,17 @@ function CadastroUsuario() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [localizacao, setLocalizacao] = useState(''); 
   const [mensagem, setMensagem] = useState('');
-  const navigate = useNavigate(); // Definido corretamente
+  const navigate = useNavigate(); // Hook para navegação programática
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (senha !== confirmarSenha) {
-      setMensagem('As senhas não coincidem!');
+      setMensagem('As senhas não coincidem!'); // Verifica se as senhas coincidem
       return;
     }
     
     try {
+      // Requisição POST para criar um novo usuário
       await axios.post('http://localhost:3000/clientes/cliente', {
         username,
         nome,
@@ -29,11 +29,11 @@ function CadastroUsuario() {
         senha,
         localizacao
       });
-      setMensagem('Usuário cadastrado com sucesso!');
-      navigate('/'); // Navega para a página inicial
+      setMensagem('Usuário cadastrado com sucesso!'); // Mensagem de sucesso
+      navigate('/'); // Redireciona para a página inicial após o cadastro
     } catch (error) {
-      setMensagem('Erro ao cadastrar usuário');
-      console.error('Erro ao cadastrar usuário:', error);
+      setMensagem('Erro ao cadastrar usuário'); // Mensagem de erro
+      console.error('Erro ao cadastrar usuário:', error); // Loga o erro no console
     }
   };
 
@@ -119,12 +119,12 @@ function CadastroUsuario() {
       </form>
       {mensagem && (
         <Typography color="error" align="center" sx={{ mt: 2 }}>
-          {mensagem}
+          {mensagem} {/* Exibe mensagem de feedback ao usuário */}
         </Typography>
       )}
       <Box sx={{ textAlign: 'center', mt: 2 }}>
         <Typography>
-          Já tem uma conta? <Link to="/login">Entrar</Link>
+          Já tem uma conta? <Link to="/login">Entrar</Link> {/* Link para a página de login */}
         </Typography>
       </Box>
     </Container>

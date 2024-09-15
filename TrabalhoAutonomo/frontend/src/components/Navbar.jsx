@@ -57,7 +57,7 @@ function Navbar({ onSidebarOpen }) {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
-    navigate('/login');
+    navigate('/signup');
   };
 
   return (
@@ -93,7 +93,7 @@ function Navbar({ onSidebarOpen }) {
             <Button color="inherit" component={Link} to="/cadastro-usuario">
               Cadastro
             </Button>
-            <Button color="inherit" component={Link} to="/login">
+            <Button color="inherit" component={Link} to="/signup">
               Login
             </Button>
           </>

@@ -1,57 +1,47 @@
 import axios from 'axios';
 
-// Criar uma instância do axios com a URL base do back-end
+// Configuração da instância do axios
 const api = axios.create({
-  baseURL: 'http://localhost:3000', // A URL base do servidor de back-end
+  baseURL: 'http://localhost:3000/', // URL base do seu backend
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-// Função para realizar login
-export const login = (email, senha) => {
-  // Envia uma requisição POST para a rota de login do back-end
-  return api.post('/auth/login', { email, senha });
-};
+// Funções para a API de Trabalhadores
+export const criarTrabalhador = (data) => api.post('/trabalhadores/trabalhador', data);
+export const obterTrabalhadorPorId = (id) => api.get(`/trabalhadores/trabalhador/${id}`);
+export const obterTodosTrabalhadores = () => api.get('/trabalhadores/trabalhador');
+export const editarTrabalhador = (id, data) => api.put(`/trabalhadores/trabalhador/${id}`, data);
+export const excluirTrabalhador = (id) => api.delete(`/trabalhadores/trabalhador/${id}`);
 
-// Função para criar um novo anúncio
-export const criarAnuncio = (anuncioData) => {
-  // Envia uma requisição POST para a rota de criação de anúncios no back-end
-  return api.post('/anuncios', anuncioData);
-};
+// Funções para a API de Clientes
+export const criarCliente = (data) => api.post('/clientes/cliente', data);
+export const obterClientePorId = (id) => api.get(`/clientes/cliente/${id}`);
+export const obterTodosClientes = () => api.get('/clientes/cliente');
+export const editarCliente = (id, data) => api.put(`/clientes/cliente/${id}`, data);
+export const excluirCliente = (id) => api.delete(`/clientes/cliente/${id}`);
 
-// Função para obter anúncios por categoria
-export const obterAnunciosPorCategoria = (categoria) => {
-  // Envia uma requisição GET para a rota de obtenção de anúncios, com filtro por categoria
-  return api.get(`/anuncios?categoria=${categoria}`);
-};
+// Funções para a API de Anúncios
+export const criarAnuncio = (data) => api.post('/anuncios/anuncio', data);
+export const obterAnuncioPorId = (id) => api.get(`/anuncios/anuncio/${id}`);
+export const obterTodosAnuncios = () => api.get('/anuncios/anuncio');
+export const editarAnuncio = (id, data) => api.put(`/anuncios/anuncio/${id}`, data);
+export const excluirAnuncio = (id) => api.delete(`/anuncios/anuncio/${id}`);
 
-// Função para fazer logout
-export const logout = () => {
-  // Envia uma requisição POST para a rota de logout do back-end
-  return api.post('/auth/logout');
-};
+// Funções para a API de Propostas
+export const criarProposta = (data) => api.post('/propostas/proposta', data);
+export const obterPropostaPorId = (id) => api.get(`/propostas/proposta/${id}`);
+export const obterTodasPropostas = () => api.get('/propostas/proposta');
+export const editarProposta = (id, data) => api.put(`/propostas/proposta/${id}`, data);
+export const excluirProposta = (id) => api.delete(`/propostas/proposta/${id}`);
 
-// Função para verificar o status de autenticação do usuário
-export const isAuthenticated = async () => {
-  try {
-    // Envia uma requisição GET para verificar se o usuário está autenticado
-    const response = await api.get('/auth/status');
-    return response.data.authenticated; // Retorna o status de autenticação
-  } catch (error) {
-    console.error('Erro ao verificar autenticação', error);
-    return false;
-  }
-};
+// Funções para a API de Avaliações
+export const criarAvaliacao = (data) => api.post('/avaliacoes/avaliacao', data);
+export const obterAvaliacoesPorTrabalhador = (id) => api.get(`/avaliacoes/trabalhador/${id}`);
+export const obterAvaliacoesPorCliente = (id) => api.get(`/avaliacoes/cliente/${id}`);
 
-// Função para registrar um novo usuário
-export const signup = (userData) => {
-  // Envia uma requisição POST para a rota de registro de usuários no back-end
-  return api.post('/auth/signup', userData);
-};
+// Função para login
+export const login = (email, senha) => api.post('/login/login', { email, senha });
 
-// Função para recuperar senha (esqueci a senha)
-export const recuperarSenha = (email) => {
-  // Envia uma requisição POST para a rota de recuperação de senha no back-end
-  return api.post('/auth/forgot-password', { email });
-};
-
-// Exporta a instância padrão do axios criada com a URL base do back-end
 export default api;

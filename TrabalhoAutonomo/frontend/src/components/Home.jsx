@@ -65,7 +65,7 @@ function Home() {
   };
 
   const handleSubcategoriaClick = (subcategoria) => {
-    navigate('/anuncios', { state: { subcategoria } });
+    navigate('lista-anuncios', { state: { subcategoria } });
     handleMenuClose();
   };
 

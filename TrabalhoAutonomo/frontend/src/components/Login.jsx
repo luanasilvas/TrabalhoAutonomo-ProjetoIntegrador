@@ -10,40 +10,50 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';  // Importação de axios para requisições ao back-end
-import { useNavigate } from 'react-router-dom';  // Importação para redirecionamento pós-login
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const navigate = useNavigate();  // Para redirecionar o usuário após o registro
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [error, setError] = useState(null); // Estado para mensagens de erro
+  const navigate = useNavigate();  // Para redirecionar o usuário após o login
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get('email');
-    const password = data.get('password');
 
-    // Faz a requisição de cadastro para o back-end
-    axios.post('/api/auth/signup', {
-      email: email,
-      password: password,
-    })
-    .then(response => {
-      console.log(response.data);  // Adicionar lógica para salvar o token JWT, por exemplo
-      // Redireciona para a página inicial após o registro bem-sucedido
-      navigate('/home');
-    })
-    .catch(error => {
-      console.error('Erro ao cadastrar usuário:', error);
-      // Adicionar lógica para lidar com erros
-    });
+    try {
+      const res = await axios.post('http://localhost:3000/login/login', {
+        email,
+        senha
+      });
+
+      const user = res.data;
+
+      console.log("Usuário logado:", user);
+
+      // Salva o ID do usuário no localStorage
+      if (user.id_cliente) {
+        localStorage.setItem('id', user.id_cliente); // Para clientes
+      } else if (user.id) {
+        localStorage.setItem('id', user.id); // Para trabalhadores
+      }
+
+      // Redireciona para a página inicial após o login
+      navigate('/');
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      setError('Erro ao fazer login. Verifique suas credenciais e tente novamente.'); // Atualiza o estado com a mensagem de erro
+    }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
-        <Grid item xs={12} sm={5} md={12} component={Box} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} component={Box} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -57,18 +67,25 @@ export default function SignUp() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign Up
+              Login
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+              {error && (
+                <Typography color="error" sx={{ mb: 2 }}>
+                  {error}
+                </Typography>
+              )}
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="email"
-                label="Endereço Gmail"
+                label="Endereço de Email"
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -79,6 +96,8 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
               />
               <Button
                 type="submit"
@@ -86,19 +105,19 @@ export default function SignUp() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Inscrever-se 
+                Entrar
               </Button>
               <Grid container>
-                <Grid item>
-                  <Link href="/cadastro-usuario" variant="body2">
-                    {"Já tem uma conta? Entrar"}
+                <Grid item xs>
+                  <Link href="/forgot-password" variant="body2">
+                    Esqueceu a senha?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/forgot-password" variant="body2">
-                    {"Esqueceu a senha?"}
+                  <Link href="/cadastro-usuario" variant="body2">
+                    {"Não possui uma conta? Cadastre-se!"}
                   </Link>
-                </Grid>   
+                </Grid>
               </Grid>
             </Box>
           </Box>
