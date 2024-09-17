@@ -1,8 +1,7 @@
 // src/components/Home.jsx
 import React, { useState } from 'react';
-import { Container, Typography, Box, Button, Grid, Card, CardContent, CardMedia, Menu, MenuItem } from '@mui/material';
+import { Container, Typography, Box, Button, Grid, Card, CardContent, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Carousel from 'react-material-ui-carousel';
 import img1 from '../assets/img/anton-SnKfmC1I9fU-unsplash.jpg';
@@ -13,11 +12,10 @@ import img5 from '../assets/img/marc-mueller-Lg8xTZjs6Lg-unsplash.jpg';
 import img6 from '../assets/img/nick-morrison-FHnnjk1Yj7Y-unsplash.jpg';
 import img7 from '../assets/img/robinson-greig-HrnAxAUwle8-unsplash.jpg';
 import img8 from '../assets/img/samsung-memory-seUxMX-DhAQ-unsplash.jpg';
+import { categorias } from '../constants/categorias';
 
 function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [subcategorias, setSubcategorias] = useState([]);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -27,57 +25,10 @@ function Home() {
     setSidebarOpen(false);
   };
 
-  const handleCategoriaClick = (event, categoria) => {
-    setAnchorEl(event.currentTarget);
-
-    switch (categoria) {
-      case 'Assistência Técnica':
-        setSubcategorias(['Eletrônicos', 'Eletrodomésticos', 'Computadores']);
-        break;
-      case 'Aulas':
-        setSubcategorias(['Música', 'Idiomas', 'Reforço Escolar']);
-        break;
-      case 'Design e Tecnologia':
-        setSubcategorias(['Aparelhos Eletrônicos', 'Eletrodomésticos', 'Áudio e Vídeo', 'Web Design', 'Design Gráfico']);
-        break;
-      case 'Eventos':
-        setSubcategorias(['Buffet', 'Decoração', 'Confeitaria', 'Carcés', 'DJs, Bandas e Cantores', 'Fotógrafo']);
-        break;
-      case 'Moda e Beleza':
-        setSubcategorias(['Cabeleireiro(a)', 'Corte e Costura', 'Artesanato', 'Manicure', 'Estética', 'Maquiador(a)']);
-        break;
-      case 'Reforma e Reparos':
-        setSubcategorias(['Pedreiro', 'Serralheiro', 'Serviços Gerais', 'Pintor']);
-        break;
-      case 'Serviços Domésticos':
-        setSubcategorias(['Diarista', 'Babá', 'Cozinheira(o)', 'Lavadeira e Passadeira']);
-        break;
-      case 'Mudança e Automotivos':
-        setSubcategorias(['Mudança', 'Transporte de Veículos']);
-        break;
-      case 'Pets':
-        setSubcategorias(['Adestrador', 'Passeador', 'Banho e Tosa']);
-        break;
-      default:
-        setSubcategorias([]);
-        break;
-    }
+  const handleCategoriaClick = (categoriaId) => {
+    // Redireciona diretamente para a página de anúncios filtrados pela categoria
+    navigate('lista-anuncios', { state: { categoriaId } });
   };
-
-  const handleSubcategoriaClick = (subcategoria) => {
-    navigate('lista-anuncios', { state: { subcategoria } });
-    handleMenuClose();
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const categorias = [
-    'Assistência Técnica', 'Aulas', 'Design e Tecnologia', 
-    'Eventos', 'Moda e Beleza', 'Reformas e Construção', 
-    'Serviços Domésticos', 'Fretes e Mudanças', 'Pets'
-  ];
 
   const servicos = [
     { nome: 'Diarista', descricao: '', imagem: img1 },
@@ -99,7 +50,6 @@ function Home() {
     <div style={{ display: 'flex' }}>
       <Sidebar open={sidebarOpen} onClose={handleDrawerClose} />
       <div style={{ flexGrow: 1 }}>
-        <Navbar onSidebarOpen={handleDrawerOpen} />
         <Container maxWidth="lg" style={{ padding: 20 }}>
           <Box sx={{ mt: 4, mb: 4 }}>
             <Typography variant="h4" component="h1" gutterBottom>
@@ -107,30 +57,19 @@ function Home() {
             </Typography>
             <Grid container spacing={2}>
               {categorias.map((categoria) => (
-                <Grid item xs={12} sm={6} md={4} key={categoria}>
+                <Grid item xs={12} sm={6} md={4} key={categoria.id}>
                   <Button
                     variant="contained"
                     color="primary"
                     fullWidth
                     style={{ marginBottom: 10 }}
-                    onClick={(event) => handleCategoriaClick(event, categoria)}
+                    onClick={() => handleCategoriaClick(categoria.id)}
                   >
-                    {categoria}
+                    {categoria.nome}
                   </Button>
                 </Grid>
               ))}
             </Grid>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              {subcategorias.map((subcategoria, index) => (
-                <MenuItem key={index} onClick={() => handleSubcategoriaClick(subcategoria)}>
-                  {subcategoria}
-                </MenuItem>
-              ))}
-            </Menu>
             <Typography variant="h5" component="h2" gutterBottom>
               Principais Serviços
             </Typography>
@@ -160,7 +99,7 @@ function Home() {
               </Typography>
               <Typography variant="body1">
                 Nossa plataforma é dedicada a conectar trabalhadores autônomos com clientes em busca de serviços diversos. 
-                Oferecemos uma ampla gama de categorias e subcategorias para ajudar nossos usuários a encontrar o profissional certo.
+                Oferecemos uma ampla gama de categorias para ajudar nossos usuários a encontrar o profissional certo.
               </Typography>
             </Box>
             <Typography variant="h5" component="h2" gutterBottom>

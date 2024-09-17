@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { obterTodosAnuncios } from '../services/api'; // Importa a função da API
+import { Grid, Card, CardContent, Typography, CircularProgress, Box } from '@mui/material';
 
 const ListaDeAnuncios = () => {
   const [anuncios, setAnuncios] = useState([]);
@@ -23,27 +24,53 @@ const ListaDeAnuncios = () => {
   }, []);
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <div>Erro ao carregar os anúncios</div>;
+    return <Typography variant="h6" color="error">Erro ao carregar os anúncios</Typography>;
   }
 
   return (
-    <div>
+    <Box sx={{ padding: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Lista de Anúncios
+      </Typography>
       {anuncios.length > 0 ? (
-        anuncios.map(anuncio => (
-          <div key={anuncio.id_anuncio}>
-            <h2>{anuncio.titulo}</h2>
-            <p>{anuncio.descricao}</p>
-            <p>Preço: {anuncio.preco}</p>
-          </div>
-        ))
+        <Grid container spacing={3}>
+          {anuncios.map((anuncio) => (
+            <Grid item xs={12} sm={6} md={4} key={anuncio.id_anuncio}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    {anuncio.titulo}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {anuncio.descricao}
+                  </Typography>
+                  <Typography variant="h6" component="div" sx={{ mt: 2 }}>
+                    Preço: R$ {anuncio.preco}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       ) : (
-        <div>Nenhum anúncio encontrado</div>
+        <Typography variant="h6">Nenhum anúncio encontrado</Typography>
       )}
-    </div>
+    </Box>
   );
 };
 

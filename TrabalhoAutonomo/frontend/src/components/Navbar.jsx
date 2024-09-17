@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, InputBase, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home'; // Ícone para o botão de voltar à Home
 import { styled, alpha } from '@mui/material/styles';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -44,7 +45,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function Navbar({ onSidebarOpen }) {
+function Navbar() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -60,6 +61,10 @@ function Navbar({ onSidebarOpen }) {
     navigate('/signup');
   };
 
+  const handleGoHome = () => {
+    navigate('/');
+  };
+
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -67,14 +72,20 @@ function Navbar({ onSidebarOpen }) {
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={onSidebarOpen}
           sx={{ mr: 2 }}
         >
           <MenuIcon />
         </IconButton>
+
+        {/* Botão de Voltar para Home */}
+        <IconButton color="inherit" onClick={handleGoHome}>
+          <HomeIcon />
+        </IconButton>
+
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          Meu Aplicativo
+          Autonomeu
         </Typography>
+
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
@@ -84,6 +95,7 @@ function Navbar({ onSidebarOpen }) {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
+
         {isLoggedIn ? (
           <Button color="inherit" onClick={handleLogout}>
             Logout

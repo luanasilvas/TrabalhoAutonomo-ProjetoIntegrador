@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true, // Preço do serviço oferecido (pode ser nulo)
     },
+    categoria: {
+      type: DataTypes.STRING,
+      allowNull: false, // Categoria do anúncio
+    },
     data_publicacao: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW, // Data de publicação do anúncio

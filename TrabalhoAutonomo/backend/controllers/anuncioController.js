@@ -14,13 +14,18 @@ exports.getAllAnuncios = async (req, res) => {
 
 // Função para criar um anúncio
 exports.createAnuncio = async (req, res) => {
-  const { titulo, descricao, preco, id_trabalhador } = req.body; // Desestruturação do corpo da requisição
+  const { titulo, descricao, preco, id_trabalhador, categoria } = req.body; // Desestruturação do corpo da requisição
   
-  console.log('Dados recebidos:', { titulo, descricao, preco, id_trabalhador });
+  console.log('Dados recebidos:', { titulo, descricao, preco, id_trabalhador, categoria });
 
   // Verifica se o ID do trabalhador foi passado
   if (!id_trabalhador) {
     return res.status(400).json({ mensagem: 'ID do trabalhador é necessário.' }); // Retorna erro de requisição inválida
+  }
+
+  // Verifica se a categoria foi passada
+  if (!categoria) {
+    return res.status(400).json({ mensagem: 'Categoria é necessária.' });
   }
 
   try {
@@ -29,7 +34,8 @@ exports.createAnuncio = async (req, res) => {
       titulo,
       descricao,
       preco,
-      id_trabalhador
+      id_trabalhador,
+      categoria // Adiciona categoria
     });
     console.log('Anúncio criado:', novoAnuncio);
     res.status(201).json({ mensagem: 'Anúncio criado com sucesso!', anuncio: novoAnuncio }); // Retorna o anúncio criado com status 201
@@ -57,12 +63,13 @@ exports.getAnuncioById = async (req, res) => {
 // Função para atualizar um anúncio
 exports.updateAnuncio = async (req, res) => {
   const { id } = req.params; // Pega o ID do anúncio a ser atualizado
-  const { titulo, descricao, preco, id_trabalhador } = req.body;
+  const { titulo, descricao, preco, id_trabalhador, categoria } = req.body; // Adiciona categoria na atualização
+
   try {
     // Atualiza o anúncio com os dados fornecidos
     const [updated] = await Anuncio.update(
-      { titulo, descricao, preco, id_trabalhador },
-      { where: { id } }
+      { titulo, descricao, preco, id_trabalhador, categoria }, // Inclui categoria
+      { where: { id_anuncio: id } } // Corrige o nome da coluna
     );
     if (updated) {
       res.status(200).json({ mensagem: 'Anúncio atualizado com sucesso!' }); // Sucesso na atualização
@@ -78,7 +85,7 @@ exports.updateAnuncio = async (req, res) => {
 exports.deleteAnuncio = async (req, res) => {
   const { id } = req.params; // Pega o ID do anúncio a ser deletado
   try {
-    const deleted = await Anuncio.destroy({ where: { id } }); // Deleta o anúncio
+    const deleted = await Anuncio.destroy({ where: { id_anuncio: id } }); // Deleta o anúncio
     if (deleted) {
       res.status(200).json({ mensagem: 'Anúncio deletado com sucesso!' }); // Sucesso na exclusão
     } else {
