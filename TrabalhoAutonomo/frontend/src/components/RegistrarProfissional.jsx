@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 
 function RegistrarProfissional() {
   const [nome, setNome] = useState('');
@@ -11,7 +11,7 @@ function RegistrarProfissional() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [descricao, setDescricao] = useState('');
   const [idade, setIdade] = useState('');
-  const [foto, setFoto] = useState(null); 
+  const [foto, setFoto] = useState(null);
   const [localizacao, setLocalizacao] = useState('');
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
   const [mensagem, setMensagem] = useState('');
@@ -25,7 +25,7 @@ function RegistrarProfissional() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     if (senha !== confirmarSenha) {
       setMensagem('As senhas não coincidem!');
       return;
@@ -41,7 +41,7 @@ function RegistrarProfissional() {
       formData.append('localizacao', localizacao);
       formData.append('idade', idade);
       if (foto) {
-        formData.append('foto_perfil', foto); 
+        formData.append('foto_perfil', foto);
       }
       formData.append('categorias', categoriasSelecionadas.join(', '));
 
@@ -69,8 +69,7 @@ function RegistrarProfissional() {
   };
 
   const handleCategoriaChange = (event) => {
-    const { value } = event.target;
-    setCategoriasSelecionadas(value);
+    setCategoriasSelecionadas(event.target.value);
   };
 
   return (
@@ -79,7 +78,7 @@ function RegistrarProfissional() {
         <Typography variant="h4" component="h1" align="center" gutterBottom>
           Cadastro de Profissional Autônomo
         </Typography>
-        
+
         <Box sx={{ mb: 2 }}>
           <Button
             variant="contained"
@@ -144,15 +143,18 @@ function RegistrarProfissional() {
             variant="outlined"
             fullWidth
             margin="normal"
+            required
+            multiline
+            rows={4}
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
           />
           <TextField
             label="Idade"
+            type="number"
             variant="outlined"
             fullWidth
             margin="normal"
-            type="number"
             required
             value={idade}
             onChange={(e) => setIdade(e.target.value)}
@@ -166,15 +168,17 @@ function RegistrarProfissional() {
             value={localizacao}
             onChange={(e) => setLocalizacao(e.target.value)}
           />
-
+          <Button variant="contained" component="label" fullWidth>
+            Upload de Foto de Perfil
+            <input type="file" hidden onChange={handleFileChange} />
+          </Button>
           <FormControl fullWidth margin="normal">
-            <InputLabel>Categoria</InputLabel>
+            <InputLabel>Categorias</InputLabel>
             <Select
               multiple
               value={categoriasSelecionadas}
               onChange={handleCategoriaChange}
               renderValue={(selected) => selected.join(', ')}
-              required
             >
               {categorias.map((categoria) => (
                 <MenuItem key={categoria} value={categoria}>
@@ -183,36 +187,15 @@ function RegistrarProfissional() {
               ))}
             </Select>
           </FormControl>
-
-          <Button
-            variant="contained"
-            component="label"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            Upload de Foto
-            <input
-              type="file"
-              hidden
-              onChange={handleFileChange}
-            />
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
             Cadastrar
           </Button>
+          {mensagem && (
+            <Typography color={mensagem.includes('Erro') ? 'error' : 'success'} sx={{ mt: 2 }}>
+              {mensagem}
+            </Typography>
+          )}
         </form>
-
-        {mensagem && (
-          <Typography color="error" align="center" sx={{ mt: 2 }}>
-            {mensagem}
-          </Typography>
-        )}
       </Box>
     </Container>
   );

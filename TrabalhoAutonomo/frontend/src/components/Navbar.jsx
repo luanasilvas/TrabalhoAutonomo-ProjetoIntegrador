@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, InputBase, Button } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import HomeIcon from '@mui/icons-material/Home'; // Ícone para o botão de voltar à Home
+import { AppBar, Toolbar, Typography, IconButton, InputBase, Button, Drawer } from '@mui/material';
+import { Menu as MenuIcon, Search as SearchIcon, Home as HomeIcon } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
+import Sidebar from './Sidebar'; // Importa o Sidebar criado
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -48,9 +47,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function Navbar() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // Estado para abrir/fechar o Drawer
 
   useEffect(() => {
-    // Verifica o estado de login ao iniciar o componente
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
@@ -65,53 +64,63 @@ function Navbar() {
     navigate('/');
   };
 
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
   return (
-    <AppBar position="sticky">
-      <Toolbar>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
+    <>
+      <AppBar position="sticky">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer} // Abre/Fecha o Drawer
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
 
-        {/* Botão de Voltar para Home */}
-        <IconButton color="inherit" onClick={handleGoHome}>
-          <HomeIcon />
-        </IconButton>
+          {/* Botão de Voltar para Home */}
+          <IconButton color="inherit" onClick={handleGoHome}>
+            <HomeIcon />
+          </IconButton>
 
-        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          Autonomeu
-        </Typography>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            Autonomeu
+          </Typography>
 
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Procurar..."
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Search>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Procurar..."
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
 
-        {isLoggedIn ? (
-          <Button color="inherit" onClick={handleLogout}>
-            Logout
-          </Button>
-        ) : (
-          <>
-            <Button color="inherit" component={Link} to="/cadastro-usuario">
-              Cadastro
+          {isLoggedIn ? (
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
             </Button>
-            <Button color="inherit" component={Link} to="/signup">
-              Login
-            </Button>
-          </>
-        )}
-      </Toolbar>
-    </AppBar>
+          ) : (
+            <>
+              <Button color="inherit" component={Link} to="/cadastro-usuario">
+                Cadastro
+              </Button>
+              <Button color="inherit" component={Link} to="/signup">
+                Login
+              </Button>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+
+      {/* Sidebar */}
+      <Sidebar open={isDrawerOpen} onClose={toggleDrawer} />
+    </>
   );
 }
 

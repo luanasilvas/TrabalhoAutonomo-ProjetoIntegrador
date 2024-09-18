@@ -34,12 +34,19 @@ export default function SignUp() {
 
       console.log("Usuário logado:", user);
 
-      // Salva o ID do usuário no localStorage
-      if (user.id_cliente) {
-        localStorage.setItem('id', user.id_cliente); // Para clientes
-      } else if (user.id) {
-        localStorage.setItem('id', user.id); // Para trabalhadores
-      }
+      // Salva o ID e o tipo de usuário no localStorage
+
+localStorage.setItem('user', JSON.stringify({
+  id: user.id_cliente || user.id,
+  username: user.username,
+  nome: user.nome,
+  email: user.email,
+  type: user.type // Adiciona o tipo aqui
+}));
+
+
+const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
+
 
       // Redireciona para a página inicial após o login
       navigate('/');

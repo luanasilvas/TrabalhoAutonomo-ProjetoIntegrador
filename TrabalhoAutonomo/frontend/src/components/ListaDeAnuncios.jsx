@@ -1,77 +1,80 @@
-import React, { useEffect, useState } from 'react';
-import { obterTodosAnuncios } from '../services/api'; // Importa a função da API
-import { Grid, Card, CardContent, Typography, CircularProgress, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Container, Typography, Box, Grid, Card, CardContent, CardMedia, Button } from '@mui/material';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const ListaDeAnuncios = () => {
+function ListaDeAnuncios() {
+  const { categoria } = useParams();
   const [anuncios, setAnuncios] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAnuncios = async () => {
       try {
-        const response = await obterTodosAnuncios(); // Usa a função da API
+        const response = await axios.get(`http://localhost:3000/anuncios/categorias/${categoria}`);
         setAnuncios(response.data);
       } catch (error) {
-        console.error('Erro ao carregar os anúncios', error);
-        setError(error);
-      } finally {
-        setLoading(false);
+        console.error('Erro ao buscar anúncios:', error);
+        setError('Erro ao buscar anúncios. Verifique o console para mais detalhes.');
       }
     };
 
     fetchAnuncios();
-  }, []);
+  }, [categoria]);
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return <Typography variant="h6" color="error">Erro ao carregar os anúncios</Typography>;
-  }
+  const handleViewAnuncio = (id) => {
+    navigate(`/anuncio/${id}`);
+  };
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Lista de Anúncios
+    <Container>
+      <Typography variant="h4" component="h1" align="center" gutterBottom>
+        Anúncios - {categoria}
       </Typography>
-      {anuncios.length > 0 ? (
-        <Grid container spacing={3}>
-          {anuncios.map((anuncio) => (
+      {error && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
+      <Grid container spacing={2}>
+        {anuncios.length > 0 ? (
+          anuncios.map((anuncio) => (
             <Grid item xs={12} sm={6} md={4} key={anuncio.id_anuncio}>
               <Card>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={anuncio.imagem || '/default-image.jpg'}
+                  alt={anuncio.titulo}
+                />
                 <CardContent>
-                  <Typography variant="h5" component="div">
+                  <Typography variant="h6" component="div">
                     {anuncio.titulo}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {anuncio.descricao}
                   </Typography>
-                  <Typography variant="h6" component="div" sx={{ mt: 2 }}>
-                    Preço: R$ {anuncio.preco}
+                  <Typography variant="h6" color="primary">
+                    R${anuncio.preco || 'Gratuito'}
                   </Typography>
                 </CardContent>
+                <Box sx={{ p: 2 }}>
+                  <Button variant="contained" onClick={() => handleViewAnuncio(anuncio.id_anuncio)}>
+                    Ver Detalhes
+                  </Button>
+                </Box>
               </Card>
             </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Typography variant="h6">Nenhum anúncio encontrado</Typography>
-      )}
-    </Box>
+          ))
+        ) : (
+          <Typography variant="h6" align="center">
+            Nenhum anúncio encontrado.
+          </Typography>
+        )}
+      </Grid>
+    </Container>
   );
-};
+}
 
 export default ListaDeAnuncios;

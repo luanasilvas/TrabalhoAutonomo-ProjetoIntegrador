@@ -1,123 +1,129 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Container, TextField, Button, Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { categorias } from '../constants/categorias'; // Importando as categorias
-import { TextField, Button, Typography, Box, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 
-export default function CriarAnuncio() {
+function CriarAnuncio() {
   const [titulo, setTitulo] = useState('');
   const [descricao, setDescricao] = useState('');
   const [preco, setPreco] = useState('');
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState(''); // Estado para a categoria
+  const [categoria, setCategoria] = useState('');
+  const [foto, setFoto] = useState(null);
+  const [mensagem, setMensagem] = useState('');
   const navigate = useNavigate();
+
+  const categorias = [
+    'Assistência Técnica', 'Aulas', 'Design e Tecnologia', 
+    'Eventos', 'Moda e Beleza', 'Reformas e Construção', 
+    'Serviços Domésticos', 'Fretes e Mudanças', 'Pets'
+  ];
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Obtendo o ID do trabalhador logado no localStorage
-    const id_trabalhador = localStorage.getItem('id');
+    const idTrabalhador = localStorage.getItem('idTrabalhador');
 
-    if (!id_trabalhador) {
-      alert('Erro: Você precisa estar logado como trabalhador para criar um anúncio.');
+    if (!idTrabalhador) {
+      setMensagem('Você deve estar logado para criar um anúncio.');
       return;
     }
 
     try {
-      const res = await axios.post('http://localhost:3000/anuncios/anuncio', {
-        id_trabalhador,
-        titulo,
-        descricao,
-        preco,
-        categoria: categoriaSelecionada, // Incluindo a categoria selecionada
+      const formData = new FormData();
+      formData.append('titulo', titulo);
+      formData.append('descricao', descricao);
+      formData.append('preco', preco);
+      formData.append('categoria', categoria);
+      if (foto) {
+        formData.append('foto', foto);
+      }
+      formData.append('id_trabalhador', idTrabalhador);
+
+      const response = await axios.post('http://localhost:3000/anuncios/criar', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
-      console.log('Anúncio criado:', res.data);
-      navigate('/lista-anuncios');
+      setMensagem('Anúncio criado com sucesso!');
+      navigate(`/categoria/${categoria}`);  // Redireciona para a página da categoria
     } catch (error) {
-      console.error('Erro ao criar anúncio:', error);
+      console.error('Erro ao criar anúncio:', error.response ? error.response.data : error.message);
+      setMensagem('Erro ao criar anúncio. Verifique o console para mais detalhes.');
     }
   };
 
+  const handleFileChange = (event) => {
+    setFoto(event.target.files[0]);
+  };
+
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        maxWidth: 600,
-        margin: '0 auto',
-        padding: 2,
-        boxShadow: 3,
-        borderRadius: 2,
-        backgroundColor: '#fff',
-      }}
-    >
-      <Typography variant="h4" component="h1" gutterBottom>
-        Criar Anúncio
-      </Typography>
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h4" component="h1" align="center" gutterBottom>
+          Criar Anúncio
+        </Typography>
 
-      <TextField
-        label="Título do Anúncio"
-        variant="outlined"
-        value={titulo}
-        onChange={(e) => setTitulo(e.target.value)}
-        required
-        fullWidth
-        margin="normal"
-      />
-
-      <TextField
-        label="Descrição"
-        variant="outlined"
-        value={descricao}
-        onChange={(e) => setDescricao(e.target.value)}
-        required
-        fullWidth
-        multiline
-        rows={4}
-        margin="normal"
-      />
-
-      <TextField
-        label="Preço"
-        variant="outlined"
-        value={preco}
-        onChange={(e) => setPreco(e.target.value)}
-        type="number"
-        fullWidth
-        margin="normal"
-      />
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="categoria-label">Categoria</InputLabel>
-        <Select
-          labelId="categoria-label"
-          id="categoria"
-          value={categoriaSelecionada}
-          onChange={(e) => setCategoriaSelecionada(e.target.value)}
-          label="Categoria"
-          required
-        >
-          <MenuItem value="">
-            <em>Selecione uma Categoria</em>
-          </MenuItem>
-          {categorias.map((categoria) => (
-            <MenuItem key={categoria.id} value={categoria.nome}>
-              {categoria.nome}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        sx={{ mt: 2 }}
-      >
-        Criar Anúncio
-      </Button>
-    </Box>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Título"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            required
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+          />
+          <TextField
+            label="Descrição"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            required
+            multiline
+            rows={4}
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+          />
+          <TextField
+            label="Preço"
+            type="number"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={preco}
+            onChange={(e) => setPreco(e.target.value)}
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Categorias</InputLabel>
+            <Select
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+              required
+            >
+              {categorias.map((categoria) => (
+                <MenuItem key={categoria} value={categoria}>
+                  {categoria}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button variant="contained" component="label" fullWidth>
+            Upload de Foto
+            <input type="file" hidden onChange={handleFileChange} />
+          </Button>
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
+            Criar Anúncio
+          </Button>
+          {mensagem && (
+            <Typography color={mensagem.includes('Erro') ? 'error' : 'success'} sx={{ mt: 2 }}>
+              {mensagem}
+            </Typography>
+          )}
+        </form>
+      </Box>
+    </Container>
   );
 }
+
+export default CriarAnuncio;

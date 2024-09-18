@@ -42,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW, // Data de criação do perfil
     },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'trabalhador', // Define o valor padrão como 'trabalhador'
+    },
   }, {
     timestamps: true, // Habilita createdAt e updatedAt
     tableName: 'Trabalhadores', // Nome da tabela no banco

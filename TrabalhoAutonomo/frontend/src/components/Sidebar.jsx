@@ -1,55 +1,44 @@
-import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Avatar, Divider, IconButton } from '@mui/material';
-import { Home, AccountCircle, Settings, ExitToApp, Close, Add } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Drawer, IconButton, Avatar, Divider, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Close, Home, AccountCircle, Settings, Add, ExitToApp } from '@mui/icons-material';
 
-function Sidebar({ open, onClose, user }) {
+function Sidebar({ open, onClose }) {
+  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Corrija a chave aqui para 'user'
+    const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
+    setUserData(storedUserData);
+  }, []);
+
   const handleProfileClick = () => {
-    if (user) {
-      if (user.type === 'cliente') {
-        navigate('/perfil-cliente'); // Substitua pela rota do perfil do cliente
-      } else if (user.type === 'trabalhador') {
-        navigate('/perfil-trabalhador'); // Substitua pela rota do perfil do trabalhador
-      }
-    }
+    navigate(`/perfil-${userData.type?.toLowerCase()}`);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
-  const handleCreateAnuncio = () => {
-    navigate('/criar-anuncio'); // Ajuste o caminho conforme sua configuração
-  };
-
   return (
-    <Drawer
-      variant="persistent"
-      anchor="left"
-      open={open}
-      onClose={onClose}
-    >
+    <Drawer variant="persistent" anchor="left" open={open} onClose={onClose}>
       <div style={{ width: 240 }}>
         <div style={{ padding: '16px', display: 'flex', alignItems: 'center', flexDirection: 'column', position: 'relative' }}>
-          <IconButton
-            onClick={onClose}
-            style={{ position: 'absolute', top: 16, right: 16 }}
-          >
+          <IconButton onClick={onClose} style={{ position: 'absolute', top: 16, right: 16 }}>
             <Close />
           </IconButton>
           <Avatar
-            src={user?.profilePicture || "link_para_imagem_de_perfil.jpg"} // Substitua com o link da imagem do perfil
+            src={userData.foto_perfil || "/default-avatar.jpg"}
             style={{ width: 80, height: 80, marginBottom: 16 }}
             onClick={handleProfileClick}
           />
-          <h4>{user?.name || 'Usuário'}</h4>
+          <h4>{userData.nome || 'Usuário'}</h4>
         </div>
         <Divider />
         <List>
-          <ListItem button onClick={() => navigate('/home')}>
+          <ListItem button onClick={() => navigate('/')}>
             <ListItemIcon><Home /></ListItemIcon>
             <ListItemText primary="Início" />
           </ListItem>
@@ -61,10 +50,12 @@ function Sidebar({ open, onClose, user }) {
             <ListItemIcon><Settings /></ListItemIcon>
             <ListItemText primary="Configurações" />
           </ListItem>
-          <ListItem button onClick={handleCreateAnuncio}>
-            <ListItemIcon><Add /></ListItemIcon>
-            <ListItemText primary="Criar Anúncio" />
-          </ListItem>
+          {userData.type === 'trabalhador' && (
+            <ListItem button onClick={() => navigate('/criar-anuncio')}>
+              <ListItemIcon><Add /></ListItemIcon>
+              <ListItemText primary="Criar Anúncio" />
+            </ListItem>
+          )}
           <ListItem button onClick={handleLogout}>
             <ListItemIcon><ExitToApp /></ListItemIcon>
             <ListItemText primary="Sair" />

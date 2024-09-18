@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router();
 const anuncioController = require('../controllers/anuncioController');
 
-router.get('/anuncio', anuncioController.getAllAnuncios);
-router.post('/anuncio', anuncioController.createAnuncio);
-router.get('/anuncio/:id', anuncioController.getAnuncioById);
-router.put('/anuncio/:id', anuncioController.updateAnuncio);
-router.delete('/anuncio/:id', anuncioController.deleteAnuncio);
+// Definições de rotas
+router.get('/anuncios', anuncioController.getAllAnuncios);
+router.post('/anuncios', anuncioController.createAnuncio);
+router.get('/anuncios/:id', anuncioController.getAnuncioById);
+router.put('/anuncios/:id', anuncioController.updateAnuncio);
+router.delete('/anuncios/:id', anuncioController.deleteAnuncio);
+
+// Rota para anúncios por categoria
+router.get('/anuncios/anuncio', anuncioController.getAnunciosPorCategoria);
 
 module.exports = router;

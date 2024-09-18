@@ -23,11 +23,12 @@ export const editarCliente = (id, data) => api.put(`/clientes/cliente/${id}`, da
 export const excluirCliente = (id) => api.delete(`/clientes/cliente/${id}`);
 
 // Funções para a API de Anúncios
-export const criarAnuncio = (data) => api.post('/anuncios/anuncio', data);
-export const obterAnuncioPorId = (id) => api.get(`/anuncios/anuncio/${id}`);
-export const obterTodosAnuncios = () => api.get('/anuncios/anuncio');
-export const editarAnuncio = (id, data) => api.put(`/anuncios/anuncio/${id}`, data);
-export const excluirAnuncio = (id) => api.delete(`/anuncios/anuncio/${id}`);
+export const criarAnuncio = (data) => api.post('/anuncios', data);
+export const obterAnuncioPorId = (id) => api.get(`/anuncios/${id}`);
+export const obterTodosAnuncios = () => api.get('/anuncios');
+export const editarAnuncio = (id, data) => api.put(`/anuncios/${id}`, data);
+export const excluirAnuncio = (id) => api.delete(`/anuncios/${id}`);
+export const obterAnunciosPorCategoria = (categoriaId) => api.get(`/anuncios/anuncio?categoria=${categoriaId}`);
 
 // Funções para a API de Propostas
 export const criarProposta = (data) => api.post('/propostas/proposta', data);

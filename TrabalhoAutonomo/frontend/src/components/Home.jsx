@@ -26,8 +26,8 @@ function Home() {
   };
 
   const handleCategoriaClick = (categoriaId) => {
-    // Redireciona diretamente para a página de anúncios filtrados pela categoria
-    navigate('lista-anuncios', { state: { categoriaId } });
+    // Redireciona para a página de anúncios filtrados pela categoria
+    navigate(`/lista-anuncios/${categoriaId}`);
   };
 
   const servicos = [
