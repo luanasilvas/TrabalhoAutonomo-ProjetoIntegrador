@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 
 function CadastroUsuario() {
-  const [username, setUsername] = useState(''); 
+  const [username, setUsername] = useState('');
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [localizacao, setLocalizacao] = useState(''); 
+  const [localizacao, setLocalizacao] = useState('');
   const [mensagem, setMensagem] = useState('');
-  const navigate = useNavigate(); // Hook para navegação programática
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (senha !== confirmarSenha) {
-      setMensagem('As senhas não coincidem!'); // Verifica se as senhas coincidem
+      setMensagem('As senhas não coincidem!');
       return;
     }
-    
+
     try {
-      // Requisição POST para criar um novo usuário
       await axios.post('http://localhost:3000/clientes/cliente', {
         username,
         nome,
@@ -29,11 +29,11 @@ function CadastroUsuario() {
         senha,
         localizacao
       });
-      setMensagem('Usuário cadastrado com sucesso!'); // Mensagem de sucesso
-      navigate('/'); // Redireciona para a página inicial após o cadastro
+      setMensagem('Usuário cadastrado com sucesso!');
+      navigate('/');
     } catch (error) {
-      setMensagem('Erro ao cadastrar usuário'); // Mensagem de erro
-      console.error('Erro ao cadastrar usuário:', error); // Loga o erro no console
+      setMensagem('Erro ao cadastrar usuário');
+      console.error('Erro ao cadastrar usuário:', error);
     }
   };
 
@@ -104,29 +104,19 @@ function CadastroUsuario() {
           variant="outlined"
           fullWidth
           margin="normal"
+          required
           value={localizacao}
           onChange={(e) => setLocalizacao(e.target.value)}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-        >
+        <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
           Cadastrar
         </Button>
+        {mensagem && (
+          <Typography color={mensagem.includes('Erro') ? 'error' : 'success'} sx={{ mt: 2 }}>
+            {mensagem}
+          </Typography>
+        )}
       </form>
-      {mensagem && (
-        <Typography color="error" align="center" sx={{ mt: 2 }}>
-          {mensagem} {/* Exibe mensagem de feedback ao usuário */}
-        </Typography>
-      )}
-      <Box sx={{ textAlign: 'center', mt: 2 }}>
-        <Typography>
-          Já tem uma conta? <Link to="/login">Entrar</Link> {/* Link para a página de login */}
-        </Typography>
-      </Box>
     </Container>
   );
 }

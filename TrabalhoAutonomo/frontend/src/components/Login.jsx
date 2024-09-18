@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';  // Importação de axios para requisições ao back-end
+import axios from 'axios';  
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ export default function SignUp() {
     event.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:3000/login/login', {
+      const res = await axios.post('http://localhost:3000/login/login', { 
         email,
         senha
       });
@@ -34,19 +34,21 @@ export default function SignUp() {
 
       console.log("Usuário logado:", user);
 
+      // Verifica o tipo de usuário logado e salva os dados adequadamente
+      const userData = {
+        id: user.id_cliente || user.id, // Pega o id_cliente (se cliente) ou id (se trabalhador)
+        username: user.username,
+        nome: user.nome,
+        email: user.email,
+        type: user.id_cliente ? 'cliente' : 'trabalhador' // Define o tipo de usuário
+      };
+
       // Salva o ID e o tipo de usuário no localStorage
+      localStorage.setItem('user', JSON.stringify(userData));
 
-localStorage.setItem('user', JSON.stringify({
-  id: user.id_cliente || user.id,
-  username: user.username,
-  nome: user.nome,
-  email: user.email,
-  type: user.type // Adiciona o tipo aqui
-}));
-
-
-const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
-
+      // Verifica se o usuário foi salvo corretamente no localStorage
+      const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
+      console.log("Dados armazenados no localStorage:", storedUserData);
 
       // Redireciona para a página inicial após o login
       navigate('/');

@@ -14,6 +14,8 @@ import CriarAnuncio from './components/CriarAnuncio';
 import Navbar from './components/Navbar'; // Certifique-se de importar o Navbar
 import Sidebar from './components/Sidebar'; // Importa o Sidebar
 import { AuthProvider } from './context/AuthContext';
+import DetalhesAnuncio from './components/DetalhesAnuncio';
+import EditarAnuncio from './components/EditarAnuncio';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false); // Estado para controlar o Sidebar
@@ -25,8 +27,8 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Navbar onMenuClick={handleSidebarToggle} /> {/* Adiciona o Navbar com prop */}
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} /> {/* Passa o estado */}
+        <Navbar onMenuClick={handleSidebarToggle} /> 
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} /> 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
@@ -37,9 +39,13 @@ function App() {
           <Route path="/perfil-trabalhador" element={<PerfilTrabalhador />} />
           <Route path="/cadastro-usuario" element={<CadastroUsuario />} />
           <Route path="/registrar-profissional" element={<RegistrarProfissional />} />
-          <Route path="/lista-anuncios/:categoriaId" element={<ListaDeAnuncios />} /> {/* Rota com parâmetro */}
+          <Route path="/lista-anuncios/:categoriaId" element={<ListaDeAnuncios />} /> 
           <Route path="/criar-anuncio" element={<CriarAnuncio />} />
           <Route path="/categoria/:categoria" element={<ListaDeAnuncios />} />
+          <Route path="/detalhes-anuncio/:id" element={<DetalhesAnuncio />} />
+          <Route path="/editar-anuncio/:id" element={<EditarAnuncio />} />
+          <Route path="/anuncio/:id" element={<DetalhesAnuncio />} />
+
         </Routes>
       </Router>
     </AuthProvider>

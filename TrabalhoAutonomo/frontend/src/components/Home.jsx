@@ -31,19 +31,14 @@ function Home() {
   };
 
   const servicos = [
-    { nome: 'Diarista', descricao: '', imagem: img1 },
-    { nome: 'Mestre de obra', descricao: 'Descrição do serviço 2', imagem: img2 },
-    { nome: 'Eletricista', descricao: 'Descrição do serviço 3', imagem: img3 },
-    { nome: 'Editor de videos', descricao: 'Descrição do serviço 4', imagem: img4 },
-    { nome: 'Desenvolvedor', descricao: 'Descrição do serviço 5', imagem: img5 },
-    { nome: 'Redator', descricao: 'Descrição do serviço 6', imagem: img6 },
-    { nome: 'Mudanças', descricao: 'Descrição do serviço 7', imagem: img7 },
-    { nome: 'Fotografo', descricao: 'Descrição do serviço 8', imagem: img8 }
-  ];
-
-  const dicasSeguranca = [
-    { titulo: 'Dica 1', descricao: 'Descrição da dica 1', imagem: 'link_da_imagem_1' },
-    { titulo: 'Dica 2', descricao: 'Descrição da dica 2', imagem: 'link_da_imagem_2' }
+    { nome: 'Diarista', descricao: 'Profissional responsável pela limpeza e organização de residências e escritórios.', imagem: img1 },
+    { nome: 'Mestre de obra', descricao: 'Especialista em coordenação e execução de projetos de construção e reformas.', imagem: img2 },
+    { nome: 'Eletricista', descricao: 'Profissional qualificado para instalação, manutenção e reparo de sistemas elétricos.', imagem: img3 },
+    { nome: 'Editor de vídeos', descricao: 'Responsável pela edição e finalização de vídeos para diversos fins, como comerciais e clipes.', imagem: img4 },
+    { nome: 'Desenvolvedor', descricao: 'Programador que cria e mantém software, websites e aplicativos.', imagem: img5 },
+    { nome: 'Redator', descricao: 'Especialista na criação de textos para blogs, artigos, e conteúdos publicitários.', imagem: img6 },
+    { nome: 'Mudanças', descricao: 'Serviço de transporte e mudança de móveis e bens de um local para outro.', imagem: img7 },
+    { nome: 'Fotógrafo', descricao: 'Profissional que captura imagens para eventos, portfólios e mais.', imagem: img8 }
   ];
 
   return (
@@ -102,29 +97,6 @@ function Home() {
                 Oferecemos uma ampla gama de categorias para ajudar nossos usuários a encontrar o profissional certo.
               </Typography>
             </Box>
-            <Typography variant="h5" component="h2" gutterBottom>
-              Dicas de Segurança
-            </Typography>
-            <Carousel animation="slide" navButtonsAlwaysVisible>
-              {dicasSeguranca.map((dica, index) => (
-                <Card key={index} style={{ minWidth: 300, margin: '0 10px' }}>
-                  <CardMedia
-                    component="img"
-                    height="300"
-                    image={dica.imagem}
-                    alt={dica.titulo}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {dica.titulo}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {dica.descricao}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </Carousel>
           </Box>
         </Container>
       </div>
