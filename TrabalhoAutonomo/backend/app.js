@@ -17,11 +17,12 @@ const propostaRoutes = require('./routes/propostaRoutes');
 const anuncioRoutes = require('./routes/anuncioRoutes');
 const avaliacaoRoutes = require('./routes/avaliacaoRoutes');
 const loginRoutes = require('./routes/loginRoutes');
+
 // Usar as rotas
 app.use('/trabalhadores', trabalhadorRoutes);
 app.use('/clientes', clienteRoutes);
 app.use('/propostas', propostaRoutes);
-app.use('/anuncios', anuncioRoutes);
+app.use('/anuncios', anuncioRoutes); // Verifique se isso está correto
 app.use('/avaliacoes', avaliacaoRoutes);
 app.use('/login', loginRoutes);
 

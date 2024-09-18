@@ -28,7 +28,9 @@ export const obterAnuncioPorId = (id) => api.get(`/anuncios/${id}`);
 export const obterTodosAnuncios = () => api.get('/anuncios');
 export const editarAnuncio = (id, data) => api.put(`/anuncios/${id}`, data);
 export const excluirAnuncio = (id) => api.delete(`/anuncios/${id}`);
-export const obterAnunciosPorCategoria = (categoriaId) => api.get(`/anuncios/anuncio?categoria=${categoriaId}`);
+
+// Correção na função para obter anúncios por categoria
+export const obterAnunciosPorCategoria = (categoriaId) => api.get(`/anuncios?categoria=${categoriaId}`);
 
 // Funções para a API de Propostas
 export const criarProposta = (data) => api.post('/propostas/proposta', data);

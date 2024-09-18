@@ -1,38 +1,41 @@
-module.exports = (sequelize, DataTypes) => {   
+module.exports = (sequelize, DataTypes) => {
   const Anuncio = sequelize.define('Anuncio', {
     id_anuncio: {
       type: DataTypes.INTEGER,
-      autoIncrement: true, // ID autoincrementado para cada anúncio
-      primaryKey: true, // Chave primária
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
     },
     id_trabalhador: {
       type: DataTypes.INTEGER,
-      allowNull: false, // ID do trabalhador associado ao anúncio
+      allowNull: false,
     },
     titulo: {
-      type: DataTypes.STRING,
-      allowNull: false, // Título do anúncio
+      type: DataTypes.STRING(255),
+      allowNull: false,
     },
     descricao: {
       type: DataTypes.TEXT,
-      allowNull: false, // Descrição detalhada do anúncio
+      allowNull: false,
     },
     preco: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: true, // Preço do serviço oferecido (pode ser nulo)
-    },
-    categoria: {
-      type: DataTypes.STRING,
-      allowNull: false, // Categoria do anúncio
+      allowNull: true,
     },
     data_publicacao: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW, // Data de publicação do anúncio
-    },
+      type: DataTypes.DATE, // Ajuste o tipo de dado para DATE
+      defaultValue: DataTypes.NOW, // Define o valor padrão como a data e hora atual
+    }
   }, {
-    tableName: 'Anuncios', // Define o nome da tabela no banco de dados
-    timestamps: false, // Não usa createdAt e updatedAt
+    tableName: 'Anuncios',
+    timestamps: false, // Ajuste conforme necessário, pode ser true se você quiser incluir colunas de timestamps
   });
+
+  // Definição dos relacionamentos, se houver
+  Anuncio.associate = (models) => {
+    // Um anúncio pertence a um trabalhador
+    Anuncio.belongsTo(models.Trabalhador, { foreignKey: 'id_trabalhador' });
+  };
 
   return Anuncio;
 };

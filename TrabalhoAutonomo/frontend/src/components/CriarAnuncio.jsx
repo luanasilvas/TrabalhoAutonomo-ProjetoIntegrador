@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +21,8 @@ function CriarAnuncio() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const idTrabalhador = localStorage.getItem('idTrabalhador');
+    const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
+    const idTrabalhador = storedUserData.id;
 
     if (!idTrabalhador) {
       setMensagem('Você deve estar logado para criar um anúncio.');
@@ -39,7 +40,7 @@ function CriarAnuncio() {
       }
       formData.append('id_trabalhador', idTrabalhador);
 
-      const response = await axios.post('http://localhost:3000/anuncios/criar', formData, {
+      const response = await axios.post('http://localhost:3000/anuncios/anuncio', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -94,32 +95,33 @@ function CriarAnuncio() {
             value={preco}
             onChange={(e) => setPreco(e.target.value)}
           />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Categorias</InputLabel>
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Categoria</InputLabel>
             <Select
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
-              required
+              label="Categoria"
             >
-              {categorias.map((categoria) => (
-                <MenuItem key={categoria} value={categoria}>
-                  {categoria}
-                </MenuItem>
+              {categorias.map((cat) => (
+                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
               ))}
             </Select>
           </FormControl>
-          <Button variant="contained" component="label" fullWidth>
-            Upload de Foto
-            <input type="file" hidden onChange={handleFileChange} />
-          </Button>
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
             Criar Anúncio
           </Button>
-          {mensagem && (
-            <Typography color={mensagem.includes('Erro') ? 'error' : 'success'} sx={{ mt: 2 }}>
-              {mensagem}
-            </Typography>
-          )}
+          {mensagem && <Typography variant="body2" color="error" align="center" sx={{ mt: 2 }}>{mensagem}</Typography>}
         </form>
       </Box>
     </Container>

@@ -1,104 +1,82 @@
-const db = require('../models');
-const Anuncio = db.Anuncio;
+const db = require('../models/index');
 
-// Função para buscar todos os anúncios
+// Função para obter todos os anúncios
 exports.getAllAnuncios = async (req, res) => {
   try {
-    const anuncios = await Anuncio.findAll();
+    const anuncios = await db.Anuncio.findAll();
     res.status(200).json(anuncios);
-  } catch (err) {
-    res.status(500).json({ mensagem: 'Erro ao buscar anúncios.', erro: err.message });
-  }
-};
-
-// Função para criar um anúncio
-exports.createAnuncio = async (req, res) => {
-  const { titulo, descricao, preco, id_trabalhador, categoria } = req.body;
-
-  console.log('Dados recebidos:', { titulo, descricao, preco, id_trabalhador, categoria });
-
-  if (!id_trabalhador) {
-    return res.status(400).json({ mensagem: 'ID do trabalhador é necessário.' });
-  }
-
-  if (!categoria) {
-    return res.status(400).json({ mensagem: 'Categoria é necessária.' });
-  }
-
-  try {
-    const novoAnuncio = await Anuncio.create({
-      titulo,
-      descricao,
-      preco,
-      id_trabalhador,
-      categoria
-    });
-    console.log('Anúncio criado:', novoAnuncio);
-    res.status(201).json({ mensagem: 'Anúncio criado com sucesso!', anuncio: novoAnuncio });
-  } catch (err) {
-    console.error('Erro ao criar anúncio:', err);
-    res.status(500).json({ mensagem: 'Erro ao criar anúncio.', erro: err.message });
-  }
-};
-
-// Função para obter anúncios por categoria
-exports.getAnunciosPorCategoria = async (req, res) => {
-  const categoria = req.query.categoria;
-  console.log(`Categoria recebida: ${categoria}`); // Adicione isto para depuração
-  try {
-    const anuncios = await Anuncio.findAll({ where: { categoria: categoria } });
-    res.json(anuncios);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar anúncios' });
+    res.status(500).json({ message: 'Erro ao buscar os anúncios', error });
   }
 };
 
-// Função para buscar um anúncio por ID
-exports.getAnuncioById = async (req, res) => {
-  const { id } = req.params;
+// Função para criar um novo anúncio
+exports.createAnuncio = async (req, res) => {
   try {
-    const anuncio = await Anuncio.findByPk(id);
+    const novoAnuncio = await db.Anuncio.create(req.body);
+    res.status(201).json(novoAnuncio);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao criar o anúncio', error });
+  }
+};
+
+// Função para obter um anúncio por ID
+exports.getAnuncioById = async (req, res) => {
+  try {
+    const anuncio = await db.Anuncio.findByPk(req.params.id);
     if (anuncio) {
       res.status(200).json(anuncio);
     } else {
-      res.status(404).json({ mensagem: 'Anúncio não encontrado.' });
+      res.status(404).json({ message: 'Anúncio não encontrado' });
     }
-  } catch (err) {
-    res.status(500).json({ mensagem: 'Erro ao buscar anúncio.', erro: err.message });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar o anúncio', error });
   }
 };
 
 // Função para atualizar um anúncio
 exports.updateAnuncio = async (req, res) => {
-  const { id } = req.params;
-  const { titulo, descricao, preco, id_trabalhador, categoria } = req.body;
-
   try {
-    const [updated] = await Anuncio.update(
-      { titulo, descricao, preco, id_trabalhador, categoria },
-      { where: { id_anuncio: id } }
-    );
+    const [updated] = await db.Anuncio.update(req.body, {
+      where: { id_anuncio: req.params.id }
+    });
     if (updated) {
-      res.status(200).json({ mensagem: 'Anúncio atualizado com sucesso!' });
+      const updatedAnuncio = await db.Anuncio.findByPk(req.params.id);
+      res.status(200).json(updatedAnuncio);
     } else {
-      res.status(404).json({ mensagem: 'Anúncio não encontrado.' });
+      res.status(404).json({ message: 'Anúncio não encontrado' });
     }
-  } catch (err) {
-    res.status(500).json({ mensagem: 'Erro ao atualizar anúncio.', erro: err.message });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao atualizar o anúncio', error });
   }
 };
 
-// Função para deletar um anúncio
+// Função para excluir um anúncio
 exports.deleteAnuncio = async (req, res) => {
-  const { id } = req.params;
   try {
-    const deleted = await Anuncio.destroy({ where: { id_anuncio: id } });
+    const deleted = await db.Anuncio.destroy({
+      where: { id_anuncio: req.params.id }
+    });
     if (deleted) {
-      res.status(200).json({ mensagem: 'Anúncio deletado com sucesso!' });
+      res.status(204).send();
     } else {
-      res.status(404).json({ mensagem: 'Anúncio não encontrado.' });
+      res.status(404).json({ message: 'Anúncio não encontrado' });
     }
-  } catch (err) {
-    res.status(500).json({ mensagem: 'Erro ao deletar anúncio.', erro: err.message });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao excluir o anúncio', error });
+  }
+};
+
+// Função para obter anúncios por categoria
+exports.getAnunciosPorCategoria = async (req, res) => {
+  try {
+    const anuncios = await db.Anuncio.findAll({
+      where: {
+        categoria_id: req.params.categoriaId
+      }
+    });
+    res.status(200).json(anuncios);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar anúncios por categoria', error });
   }
 };
