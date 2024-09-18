@@ -22,30 +22,27 @@ function App() {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const user = {
-    name: 'John Doe', // Exemplo de dados do usuário
-    type: 'trabalhador', // Pode ser 'cliente' ou 'trabalhador'
-    profilePicture: '', // Link para a imagem de perfil
-  };
-
   return (
-    <Router>
-      <Navbar onMenuClick={handleSidebarToggle} /> {/* Adiciona o Navbar com prop */}
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} user={user} /> {/* Passa o estado */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/enviar-proposta" element={<EnviarProposta />} />
-        <Route path="/avaliacao-feedback" element={<AvaliacaoFeedback />} />
-        <Route path="/perfil-cliente" element={<PerfilCliente />} />
-        <Route path="/perfil-trabalhador" element={<PerfilTrabalhador />} />
-        <Route path="/cadastro-usuario" element={<CadastroUsuario />} />
-        <Route path="/registrar-profissional" element={<RegistrarProfissional />} />
-        <Route path="/lista-anuncios/:categoriaId" element={<ListaDeAnuncios />} /> {/* Rota com parâmetro */}
-        <Route path="/criar-anuncio" element={<CriarAnuncio />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Navbar onMenuClick={handleSidebarToggle} /> {/* Adiciona o Navbar com prop */}
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} /> {/* Passa o estado */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/enviar-proposta" element={<EnviarProposta />} />
+          <Route path="/avaliacao-feedback" element={<AvaliacaoFeedback />} />
+          <Route path="/perfil-cliente" element={<PerfilCliente />} />
+          <Route path="/perfil-trabalhador" element={<PerfilTrabalhador />} />
+          <Route path="/cadastro-usuario" element={<CadastroUsuario />} />
+          <Route path="/registrar-profissional" element={<RegistrarProfissional />} />
+          <Route path="/lista-anuncios/:categoriaId" element={<ListaDeAnuncios />} /> {/* Rota com parâmetro */}
+          <Route path="/criar-anuncio" element={<CriarAnuncio />} />
+          <Route path="/categoria/:categoria" element={<ListaDeAnuncios />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function ListaDeAnuncios() {
-  const { categoria } = useParams();
+  const { categoriaId } = useParams(); // Certifique-se de que o parâmetro é 'categoriaId'
   const [anuncios, setAnuncios] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function ListaDeAnuncios() {
   useEffect(() => {
     const fetchAnuncios = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/anuncios/categorias/${categoria}`);
+        const response = await axios.get(`http://localhost:3000/anuncios?categoria=${categoriaId}`);
         setAnuncios(response.data);
       } catch (error) {
         console.error('Erro ao buscar anúncios:', error);
@@ -21,7 +21,7 @@ function ListaDeAnuncios() {
     };
 
     fetchAnuncios();
-  }, [categoria]);
+  }, [categoriaId]);
 
   const handleViewAnuncio = (id) => {
     navigate(`/anuncio/${id}`);
@@ -30,7 +30,7 @@ function ListaDeAnuncios() {
   return (
     <Container>
       <Typography variant="h4" component="h1" align="center" gutterBottom>
-        Anúncios - {categoria}
+        Anúncios - {categoriaId}
       </Typography>
       {error && (
         <Typography color="error" sx={{ mb: 2 }}>
@@ -45,7 +45,7 @@ function ListaDeAnuncios() {
                 <CardMedia
                   component="img"
                   height="140"
-                  image={anuncio.imagem || '/default-image.jpg'}
+                  image={anuncio.foto || '/default-image.jpg'} // Use `foto` se o nome da chave for `foto`
                   alt={anuncio.titulo}
                 />
                 <CardContent>

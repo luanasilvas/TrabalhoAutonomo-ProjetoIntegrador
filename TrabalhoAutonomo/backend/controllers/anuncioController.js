@@ -13,7 +13,7 @@ exports.getAllAnuncios = async (req, res) => {
 
 exports.createAnuncio = async (req, res) => {
   const { id_trabalhador, titulo, descricao, preco, categoria } = req.body;
-const foto = req.file ? req.file.filename : null; // Acessa o arquivo enviado
+const foto = req.file ? req.file.filename : null; 
 
 // Verificar se todos os campos obrigatórios estão presentes
 if (!id_trabalhador || !titulo || !descricao || !categoria) {
