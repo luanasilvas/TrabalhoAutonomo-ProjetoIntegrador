@@ -12,7 +12,7 @@ function Sidebar({ open, onClose }) {
     const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
     setUserData(storedUserData);
 
-    // Listener para mudanças no localStorage, para atualizar o Sidebar quando houver mudanças
+    // Listener para mudanças no localStorage
     const handleStorageChange = () => {
       const updatedUserData = JSON.parse(localStorage.getItem('user')) || {};
       setUserData(updatedUserData);
@@ -61,7 +61,7 @@ function Sidebar({ open, onClose }) {
                 style={{ width: 80, height: 80, marginBottom: 16 }}
                 onClick={handleProfileClick}
               />
-              <h4>{userData.nome || 'Usuário'}</h4>
+              <h4>{userData.nome}</h4>
             </>
           ) : (
             <div style={{ padding: '16px' }}>

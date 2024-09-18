@@ -1,19 +1,17 @@
+// DetalhesAnuncio.jsx
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Container, Typography, Button, CircularProgress, Alert, Box } from '@mui/material';
 
 const DetalhesAnuncio = () => {
   const { id } = useParams(); // Pega o ID do anúncio da URL
+  const navigate = useNavigate();
   const [anuncio, setAnuncio] = useState(null);
   const [erro, setErro] = useState(null);
 
   useEffect(() => {
     const fetchAnuncio = async () => {
-      if (!id) {
-        setErro('ID do anúncio não fornecido.');
-        return;
-      }
-
       try {
         const response = await axios.get(`/api/anuncios/${id}`);
         setAnuncio(response.data);
@@ -26,23 +24,70 @@ const DetalhesAnuncio = () => {
     fetchAnuncio();
   }, [id]);
 
+  const handleDelete = async () => {
+    if (window.confirm('Tem certeza que deseja excluir este anúncio?')) {
+      try {
+        await axios.delete(`/api/anuncios/${id}`);
+        // Redireciona para a lista de anúncios após a exclusão
+        navigate('/lista-anuncios');
+      } catch (error) {
+        setErro('Erro ao excluir o anúncio.');
+        console.error('Erro ao excluir o anúncio:', error);
+      }
+    }
+  };
+
   if (erro) {
-    return <p>{erro}</p>;
+    return (
+      <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
+        <Alert severity="error">{erro}</Alert>
+      </Container>
+    );
   }
 
   if (!anuncio) {
-    return <p>Carregando...</p>;
+    return (
+      <Container maxWidth="sm" style={{ marginTop: '2rem', textAlign: 'center' }}>
+        <CircularProgress />
+        <Typography variant="body1" style={{ marginTop: '1rem' }}>
+          Carregando...
+        </Typography>
+      </Container>
+    );
   }
 
   return (
-    <div>
-      <h2>{anuncio.titulo}</h2>
-      <p>{anuncio.descricao}</p>
-      <p>Preço: {anuncio.preco}</p>
-      <p>Data de Publicação: {anuncio.data_publicacao}</p>
-      {/* Link para a página de edição */}
-      <a href={`/editar-anuncio/${anuncio.id_anuncio}`}>Editar Anúncio</a>
-    </div>
+    <Container maxWidth="sm" style={{ marginTop: '2rem', padding: '2rem', backgroundColor: '#f5f5f5', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        {anuncio.titulo}
+      </Typography>
+      <Typography variant="body1" paragraph>
+        {anuncio.descricao}
+      </Typography>
+      <Typography variant="h6" component="p">
+        Preço: <strong>{anuncio.preco}</strong>
+      </Typography>
+      <Typography variant="subtitle1" component="p">
+        Data de Publicação: {anuncio.data_publicacao}
+      </Typography>
+      <Box textAlign="center" style={{ marginTop: '1.5rem' }}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          href={`/editar-anuncio/${anuncio.id_anuncio}`} 
+          style={{ marginRight: '1rem' }}
+        >
+          Editar Anúncio
+        </Button>
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={handleDelete}
+        >
+          Excluir Anúncio
+        </Button>
+      </Box>
+    </Container>
   );
 };
 
