@@ -10,33 +10,31 @@ exports.getAllAnuncios = async (req, res) => {
   }
 };
 
-// Função para criar um novo anúncio
-// backend/controllers/anuncioController.js
-const { Anuncio } = require('../models');
 
 exports.createAnuncio = async (req, res) => {
-  const { id_trabalhador, titulo, descricao, preco, categoria, foto } = req.body;
+  const { id_trabalhador, titulo, descricao, preco, categoria } = req.body;
+const foto = req.file ? req.file.filename : null; // Acessa o arquivo enviado
 
-  // Verificar se todos os campos obrigatórios estão presentes
-  if (!id_trabalhador || !titulo || !descricao || !categoria) {
-    return res.status(400).json({ message: 'Campos obrigatórios não preenchidos' });
-  }
+// Verificar se todos os campos obrigatórios estão presentes
+if (!id_trabalhador || !titulo || !descricao || !categoria) {
+  return res.status(400).json({ message: 'Campos obrigatórios não preenchidos' });
+}
 
-  try {
-    const novoAnuncio = await Anuncio.create({
-      id_trabalhador,
-      titulo,
-      descricao,
-      preco,
-      categoria,
-      foto
-    });
-    res.status(201).json(novoAnuncio);
-  } catch (error) {
-    console.error('Erro ao criar anúncio:', error);
-    res.status(500).json({ message: 'Erro interno do servidor' });
-  }
-};
+try {
+  const novoAnuncio = await db.Anuncio.create({
+    id_trabalhador,
+    titulo,
+    descricao,
+    preco,
+    categoria,
+    foto
+  });
+  res.status(201).json(novoAnuncio);
+} catch (error) {
+  console.error('Erro ao criar anúncio:', error);
+  res.status(500).json({ message: 'Erro interno do servidor' });
+}
+}
 
 
 // Função para obter um anúncio por ID
