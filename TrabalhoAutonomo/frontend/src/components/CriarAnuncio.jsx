@@ -20,39 +20,51 @@ function CriarAnuncio() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
     const idTrabalhador = storedUserData.id;
-
+  
     if (!idTrabalhador) {
       setMensagem('Você deve estar logado para criar um anúncio.');
       return;
     }
-
+  
+    if (!titulo || !descricao || !categoria) {
+      setMensagem('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+  
     try {
       const formData = new FormData();
       formData.append('titulo', titulo);
       formData.append('descricao', descricao);
-      formData.append('preco', preco);
+      formData.append('preco', preco || '');
       formData.append('categoria', categoria);
       if (foto) {
         formData.append('foto', foto);
       }
       formData.append('id_trabalhador', idTrabalhador);
-
-      const response = await axios.post('http://localhost:3000/anuncios/anuncio', formData, {
+  
+      // Verificar o conteúdo do FormData
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+  
+      const response = await axios.post('http://localhost:3000/anuncios', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-
+  
       setMensagem('Anúncio criado com sucesso!');
-      navigate(`/categoria/${categoria}`);  // Redireciona para a página da categoria
+      navigate(`/categoria/${categoria}`);
     } catch (error) {
       console.error('Erro ao criar anúncio:', error.response ? error.response.data : error.message);
       setMensagem('Erro ao criar anúncio. Verifique o console para mais detalhes.');
     }
   };
+  
+  
 
   const handleFileChange = (event) => {
     setFoto(event.target.files[0]);

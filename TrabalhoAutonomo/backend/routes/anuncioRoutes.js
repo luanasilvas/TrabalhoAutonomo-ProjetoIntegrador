@@ -3,7 +3,7 @@ const router = express.Router();
 const anuncioController = require('../controllers/anuncioController');
 
 // Definições de rotas
-router.get('/', anuncioController.getAllAnuncios); // Corrigido para '/'
+router.get('/', anuncioController.getAllAnuncios); 
 router.post('/', anuncioController.createAnuncio);
 router.get('/:id', anuncioController.getAnuncioById);
 router.put('/:id', anuncioController.updateAnuncio);

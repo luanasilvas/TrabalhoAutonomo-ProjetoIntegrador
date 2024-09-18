@@ -20,20 +20,26 @@ module.exports = (sequelize, DataTypes) => {
     },
     preco: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: true,
+      allowNull: true, // Pode ser null
+    },
+    categoria: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+    foto: {
+      type: DataTypes.STRING,
+      allowNull: true // Pode ser null
     },
     data_publicacao: {
-      type: DataTypes.DATE, // Ajuste o tipo de dado para DATE
-      defaultValue: DataTypes.NOW, // Define o valor padrão como a data e hora atual
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     }
   }, {
     tableName: 'Anuncios',
-    timestamps: false, // Ajuste conforme necessário, pode ser true se você quiser incluir colunas de timestamps
+    timestamps: false,
   });
 
-  // Definição dos relacionamentos, se houver
   Anuncio.associate = (models) => {
-    // Um anúncio pertence a um trabalhador
     Anuncio.belongsTo(models.Trabalhador, { foreignKey: 'id_trabalhador' });
   };
 

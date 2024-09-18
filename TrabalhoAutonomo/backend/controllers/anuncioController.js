@@ -11,14 +11,33 @@ exports.getAllAnuncios = async (req, res) => {
 };
 
 // Função para criar um novo anúncio
+// backend/controllers/anuncioController.js
+const { Anuncio } = require('../models');
+
 exports.createAnuncio = async (req, res) => {
+  const { id_trabalhador, titulo, descricao, preco, categoria, foto } = req.body;
+
+  // Verificar se todos os campos obrigatórios estão presentes
+  if (!id_trabalhador || !titulo || !descricao || !categoria) {
+    return res.status(400).json({ message: 'Campos obrigatórios não preenchidos' });
+  }
+
   try {
-    const novoAnuncio = await db.Anuncio.create(req.body);
+    const novoAnuncio = await Anuncio.create({
+      id_trabalhador,
+      titulo,
+      descricao,
+      preco,
+      categoria,
+      foto
+    });
     res.status(201).json(novoAnuncio);
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao criar o anúncio', error });
+    console.error('Erro ao criar anúncio:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
   }
 };
+
 
 // Função para obter um anúncio por ID
 exports.getAnuncioById = async (req, res) => {
@@ -72,7 +91,7 @@ exports.getAnunciosPorCategoria = async (req, res) => {
   try {
     const anuncios = await db.Anuncio.findAll({
       where: {
-        categoria_id: req.params.categoriaId
+        categoria: req.params.categoriaId
       }
     });
     res.status(200).json(anuncios);

@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
@@ -36,8 +36,8 @@ db.sequelize.authenticate()
     db.sequelize.sync()
       .then(() => {
         console.log('Modelos sincronizados com o banco de dados.');
-        app.listen(port, () => {
-          console.log(`Servidor rodando na porta ${port}`);
+        app.listen(PORT, () => { // Corrigido para usar PORT
+          console.log(`Servidor rodando na porta ${PORT}`);
         });
       })
       .catch((error) => {

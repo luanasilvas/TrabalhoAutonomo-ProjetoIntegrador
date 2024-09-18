@@ -4,7 +4,7 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: 'http://localhost:3000/', // URL base do seu backend
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json', // Este valor é usado para `application/json`
   },
 });
 
@@ -23,10 +23,16 @@ export const editarCliente = (id, data) => api.put(`/clientes/cliente/${id}`, da
 export const excluirCliente = (id) => api.delete(`/clientes/cliente/${id}`);
 
 // Funções para a API de Anúncios
-export const criarAnuncio = (data) => api.post('/anuncios', data);
+export const criarAnuncio = (data) => {
+  const headers = { 'Content-Type': 'multipart/form-data' }; // Use `multipart/form-data` para arquivos
+  return api.post('/anuncios', data, { headers });
+};
 export const obterAnuncioPorId = (id) => api.get(`/anuncios/${id}`);
 export const obterTodosAnuncios = () => api.get('/anuncios');
-export const editarAnuncio = (id, data) => api.put(`/anuncios/${id}`, data);
+export const editarAnuncio = (id, data) => {
+  const headers = { 'Content-Type': 'multipart/form-data' }; // Use `multipart/form-data` para arquivos
+  return api.put(`/anuncios/${id}`, data, { headers });
+};
 export const excluirAnuncio = (id) => api.delete(`/anuncios/${id}`);
 
 // Correção na função para obter anúncios por categoria

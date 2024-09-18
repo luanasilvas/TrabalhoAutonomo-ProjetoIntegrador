@@ -1,3 +1,4 @@
+// backend/models/index.js
 const { Sequelize, DataTypes } = require('sequelize');
 require('dotenv').config(); // Certifique-se de que as variáveis de ambiente estão carregadas
 
@@ -21,11 +22,18 @@ db.Avaliacao = require('./avaliacaoModel')(sequelize, DataTypes);
 
 // Definição dos relacionamentos entre as tabelas
 db.Trabalhador.hasMany(db.Avaliacao, { foreignKey: 'id_trabalhador' }); // Um trabalhador pode ter várias avaliações
-db.Cliente.hasMany(db.Avaliacao, { foreignKey: 'id_cliente' }); // Um cliente pode fazer várias avaliações
+db.Avaliacao.belongsTo(db.Trabalhador, { foreignKey: 'id_trabalhador' }); // Uma avaliação pertence a um trabalhador
 
-// Outras associações
+db.Cliente.hasMany(db.Avaliacao, { foreignKey: 'id_cliente' }); // Um cliente pode fazer várias avaliações
+db.Avaliacao.belongsTo(db.Cliente, { foreignKey: 'id_cliente' }); // Uma avaliação pertence a um cliente
+
 db.Cliente.hasMany(db.Proposta, { foreignKey: 'id_cliente' }); // Um cliente pode enviar várias propostas
+db.Proposta.belongsTo(db.Cliente, { foreignKey: 'id_cliente' }); // Uma proposta pertence a um cliente
+
 db.Trabalhador.hasMany(db.Proposta, { foreignKey: 'id_trabalhador' }); // Um trabalhador pode receber várias propostas
+db.Proposta.belongsTo(db.Trabalhador, { foreignKey: 'id_trabalhador' }); // Uma proposta pertence a um trabalhador
+
 db.Trabalhador.hasMany(db.Anuncio, { foreignKey: 'id_trabalhador' }); // Um trabalhador pode criar vários anúncios
+db.Anuncio.belongsTo(db.Trabalhador, { foreignKey: 'id_trabalhador' }); // Um anúncio pertence a um trabalhador
 
 module.exports = db; // Exporta os modelos e a conexão para uso em outras partes do projeto
