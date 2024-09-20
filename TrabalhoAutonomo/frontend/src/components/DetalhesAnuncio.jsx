@@ -1,15 +1,15 @@
-// DetalhesAnuncio.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Typography, Button, CircularProgress, Alert, Box } from '@mui/material';
+import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material'; // Importando ícones
 
 const DetalhesAnuncio = () => {
-  const { id } = useParams(); // Pega o ID do anúncio da URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [anuncio, setAnuncio] = useState(null);
   const [erro, setErro] = useState(null);
-  const [userData, setUserData] = useState({}); // Para armazenar os dados do usuário
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     const fetchAnuncio = async () => {
@@ -35,13 +35,38 @@ const DetalhesAnuncio = () => {
     if (window.confirm('Tem certeza que deseja excluir este anúncio?')) {
       try {
         await axios.delete(`/api/anuncios/${id}`);
-        // Redireciona para a lista de anúncios após a exclusão
         navigate('/lista-anuncios');
       } catch (error) {
         setErro('Erro ao excluir o anúncio.');
         console.error('Erro ao excluir o anúncio:', error);
       }
     }
+  };
+
+  const renderSocialLinks = () => {
+    const links = anuncio.redes_sociais ? anuncio.redes_sociais.split(',') : [];
+    return links.map((link, index) => {
+      const trimmedLink = link.trim();
+      let icon = null;
+
+      if (trimmedLink.includes('facebook.com')) {
+        icon = <Facebook />;
+      } else if (trimmedLink.includes('twitter.com')) {
+        icon = <Twitter />;
+      } else if (trimmedLink.includes('instagram.com')) {
+        icon = <Instagram />;
+      } else if (trimmedLink.includes('linkedin.com')) {
+        icon = <LinkedIn />;
+      }
+
+      return (
+        icon && (
+          <a href={trimmedLink} target="_blank" rel="noopener noreferrer" key={index} style={{ marginRight: '8px', color: 'inherit' }}>
+            {icon}
+          </a>
+        )
+      );
+    });
   };
 
   if (erro) {
@@ -77,7 +102,6 @@ const DetalhesAnuncio = () => {
       <Typography variant="subtitle1" component="p">
         Data de Publicação: {anuncio.data_publicacao}
       </Typography>
-      {/* Novos campos de contato */}
       <Typography variant="subtitle1" component="p">
         Email: <strong>{anuncio.email}</strong>
       </Typography>
@@ -85,7 +109,10 @@ const DetalhesAnuncio = () => {
         Telefone: <strong>{anuncio.telefone}</strong>
       </Typography>
       <Typography variant="subtitle1" component="p">
-        Redes Sociais: <strong>{anuncio.redes_sociais}</strong>
+        Redes Sociais:
+        <strong>
+          {renderSocialLinks()}
+        </strong>
       </Typography>
       <Box textAlign="center" style={{ marginTop: '1.5rem' }}>
         {userData.type === 'trabalhador' && (
