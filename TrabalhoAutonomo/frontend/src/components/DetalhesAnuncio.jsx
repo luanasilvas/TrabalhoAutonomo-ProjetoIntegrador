@@ -9,6 +9,7 @@ const DetalhesAnuncio = () => {
   const navigate = useNavigate();
   const [anuncio, setAnuncio] = useState(null);
   const [erro, setErro] = useState(null);
+  const [userData, setUserData] = useState({}); // Para armazenar os dados do usuário
 
   useEffect(() => {
     const fetchAnuncio = async () => {
@@ -21,7 +22,13 @@ const DetalhesAnuncio = () => {
       }
     };
 
+    const fetchUserData = () => {
+      const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
+      setUserData(storedUserData);
+    };
+
     fetchAnuncio();
+    fetchUserData();
   }, [id]);
 
   const handleDelete = async () => {
@@ -70,22 +77,36 @@ const DetalhesAnuncio = () => {
       <Typography variant="subtitle1" component="p">
         Data de Publicação: {anuncio.data_publicacao}
       </Typography>
+      {/* Novos campos de contato */}
+      <Typography variant="subtitle1" component="p">
+        Email: <strong>{anuncio.email}</strong>
+      </Typography>
+      <Typography variant="subtitle1" component="p">
+        Telefone: <strong>{anuncio.telefone}</strong>
+      </Typography>
+      <Typography variant="subtitle1" component="p">
+        Redes Sociais: <strong>{anuncio.redes_sociais}</strong>
+      </Typography>
       <Box textAlign="center" style={{ marginTop: '1.5rem' }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          href={`/editar-anuncio/${anuncio.id_anuncio}`} 
-          style={{ marginRight: '1rem' }}
-        >
-          Editar Anúncio
-        </Button>
-        <Button 
-          variant="contained" 
-          color="secondary" 
-          onClick={handleDelete}
-        >
-          Excluir Anúncio
-        </Button>
+        {userData.type === 'trabalhador' && (
+          <>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              href={`/editar-anuncio/${anuncio.id_anuncio}`} 
+              style={{ marginRight: '1rem' }}
+            >
+              Editar Anúncio
+            </Button>
+            <Button 
+              variant="contained" 
+              color="secondary" 
+              onClick={handleDelete}
+            >
+              Excluir Anúncio
+            </Button>
+          </>
+        )}
       </Box>
     </Container>
   );

@@ -9,6 +9,9 @@ function CriarAnuncio() {
   const [preco, setPreco] = useState('');
   const [categoria, setCategoria] = useState('');
   const [foto, setFoto] = useState(null);
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [redesSociais, setRedesSociais] = useState('');
   const [mensagem, setMensagem] = useState('');
   const navigate = useNavigate();
 
@@ -29,7 +32,7 @@ function CriarAnuncio() {
       return;
     }
   
-    if (!titulo || !descricao || !categoria) {
+    if (!titulo || !descricao || !categoria || !email || !telefone) {
       setMensagem('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -44,12 +47,10 @@ function CriarAnuncio() {
         formData.append('foto', foto);
       }
       formData.append('id_trabalhador', idTrabalhador);
-  
-      // Verificar o conteúdo do FormData
-      for (let pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-      }
-  
+      formData.append('email', email);
+      formData.append('telefone', telefone);
+      formData.append('redes_sociais', redesSociais);
+
       const response = await axios.post('http://localhost:3000/anuncios', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -64,8 +65,6 @@ function CriarAnuncio() {
     }
   };
   
-  
-
   const handleFileChange = (event) => {
     setFoto(event.target.files[0]);
   };
@@ -119,6 +118,32 @@ function CriarAnuncio() {
               ))}
             </Select>
           </FormControl>
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            label="Telefone"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            required
+            value={telefone}
+            onChange={(e) => setTelefone(e.target.value)}
+          />
+          <TextField
+            label="Redes Sociais (opcional)"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={redesSociais}
+            onChange={(e) => setRedesSociais(e.target.value)}
+          />
           <input
             type="file"
             accept="image/*"

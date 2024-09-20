@@ -18,8 +18,8 @@ const defaultTheme = createTheme();
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [error, setError] = useState(null); // Estado para mensagens de erro
-  const navigate = useNavigate();  // Para redirecionar o usuário após o login
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,33 +34,29 @@ export default function SignUp() {
 
       console.log("Usuário logado:", user);
 
-      // Verifica o tipo de usuário logado e salva os dados adequadamente
       const userData = {
-        id: user.id_cliente || user.id, // Pega o id_cliente (se cliente) ou id (se trabalhador)
+        id: user.id_cliente || user.id,
         username: user.username,
         nome: user.nome,
         email: user.email,
-        type: user.id_cliente ? 'cliente' : 'trabalhador' // Define o tipo de usuário
+        type: user.id_cliente ? 'cliente' : 'trabalhador'
       };
 
-      // Salva o ID e o tipo de usuário no localStorage
       localStorage.setItem('user', JSON.stringify(userData));
 
-      // Verifica se o usuário foi salvo corretamente no localStorage
       const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
       console.log("Dados armazenados no localStorage:", storedUserData);
 
-      // Redireciona para a página inicial após o login
       navigate('/');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-      setError('Erro ao fazer login. Verifique suas credenciais e tente novamente.'); // Atualiza o estado com a mensagem de erro
+      setError('Erro ao fazer login. Verifique suas credenciais e tente novamente.');
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
         <CssBaseline />
         <Grid item xs={12} sm={8} md={5} component={Box} elevation={6} square>
           <Box

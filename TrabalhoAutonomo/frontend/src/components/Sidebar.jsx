@@ -7,15 +7,16 @@ function Sidebar({ open, onClose }) {
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Atualiza o estado do usuário com base nos dados armazenados
+  const fetchUserData = () => {
     const storedUserData = JSON.parse(localStorage.getItem('user')) || {};
     setUserData(storedUserData);
+  };
 
-    // Listener para mudanças no localStorage
+  useEffect(() => {
+    fetchUserData();
+
     const handleStorageChange = () => {
-      const updatedUserData = JSON.parse(localStorage.getItem('user')) || {};
-      setUserData(updatedUserData);
+      fetchUserData();
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -27,24 +28,28 @@ function Sidebar({ open, onClose }) {
 
   const handleProfileClick = () => {
     navigate(`/perfil-${userData.type?.toLowerCase()}`);
+    onClose(); // Fecha o sidebar ao clicar no perfil
   };
 
   const handleLogout = () => {
     const confirmLogout = window.confirm('Você deseja realmente sair?');
     if (confirmLogout) {
       localStorage.removeItem('user');
-      localStorage.removeItem('token'); // Limpa também o token se houver
-      setUserData({}); // Limpa o estado do usuário
-      navigate('/signup'); // Redireciona para a página de login
+      localStorage.removeItem('token');
+      setUserData({});
+      navigate('/signup');
+      onClose(); // Fecha o sidebar ao sair
     }
   };
 
   const handleLogin = () => {
     navigate('/signup');
+    onClose(); // Fecha o sidebar ao clicar em login
   };
 
   const handleSignup = () => {
     navigate('/cadastro-usuario');
+    onClose(); // Fecha o sidebar ao clicar em cadastrar
   };
 
   return (
@@ -78,12 +83,12 @@ function Sidebar({ open, onClose }) {
         <List>
           {userData.nome ? (
             <>
-              <ListItem button onClick={() => navigate('/')}>
+              <ListItem button onClick={() => { navigate('/'); onClose(); }}>
                 <ListItemIcon><Home /></ListItemIcon>
                 <ListItemText primary="Início" />
               </ListItem>
               {userData.type === 'trabalhador' && (
-                <ListItem button onClick={() => navigate('/criar-anuncio')}>
+                <ListItem button onClick={() => { navigate('/criar-anuncio'); onClose(); }}>
                   <ListItemIcon><Add /></ListItemIcon>
                   <ListItemText primary="Criar Anúncio" />
                 </ListItem>

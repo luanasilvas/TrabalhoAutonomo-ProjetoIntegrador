@@ -30,6 +30,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true // Pode ser null
     },
+    email: {
+      type: DataTypes.STRING(255),
+      allowNull: true, // Pode ser null
+    },
+    telefone: {
+      type: DataTypes.STRING(50),
+      allowNull: true, // Pode ser null
+    },
+    redes_sociais: {
+      type: DataTypes.TEXT,
+      allowNull: true, // Pode ser null
+    },
+    referencias: {
+      type: DataTypes.TEXT,
+      allowNull: true, // Pode ser null
+    },
     data_publicacao: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
