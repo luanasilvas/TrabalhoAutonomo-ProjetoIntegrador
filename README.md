@@ -58,13 +58,14 @@ Frontend
 ``
 5. Configure o arquivo `.env` com suas credenciais de banco de dados e outras variáveis de ambiente:
 `` 
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=admin
-DB_NAME=autonomeu
-NODE_ENV=development
+  DB_HOST=localhost
+  DB_PORT=3306
+  DB_USER=root
+  DB_PASSWORD=admin
+  DB_NAME=autonomeu
+  NODE_ENV=development
 ``
+
 💾 Uso
 
 Acesse a aplicação em `http://localhost:5173` após iniciar o servidor. Utilize a interface para criar uma conta, listar seus serviços e conectar-se com clientes.
