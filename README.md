@@ -57,6 +57,7 @@ Frontend
    npm start
 ``
 5. Configure o arquivo `.env` com suas credenciais de banco de dados e outras variáveis de ambiente:
+   
 `` 
   DB_HOST=localhost
   DB_PORT=3306
