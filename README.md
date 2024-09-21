@@ -38,32 +38,33 @@ Frontend
  Passos
 
 1. Clone este repositório:
-
+``
    bash
    git clone https://github.com/seu-usuario/Projeto-Divulgacao-Trabalho-Autonômo.git
-   
+  `` 
 
 2. Entre na pasta do projeto:
-
+``
    bash
    cd Projeto-Divulgacao-Trabalho-Autonômo
-   
+  `` 
 
 3. Abra um terminal para instalar as dependências e iniciar o servidor:
 
    bash
+   ``
    npm install
    npm start
-
-4. Configure o arquivo `.env` com suas credenciais de banco de dados e outras variáveis de ambiente:
- 
+``
+5. Configure o arquivo `.env` com suas credenciais de banco de dados e outras variáveis de ambiente:
+`` 
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=admin
 DB_NAME=autonomeu
 NODE_ENV=development
-
+``
 💾 Uso
 
 Acesse a aplicação em `http://localhost:5173` após iniciar o servidor. Utilize a interface para criar uma conta, listar seus serviços e conectar-se com clientes.
